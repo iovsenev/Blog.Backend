@@ -1,4 +1,6 @@
-﻿using Blog.Infrastructure.DbContexts;
+﻿using Blog.Application.Interfaces;
+using Blog.Infrastructure.DbContexts;
+using Blog.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ public static class DependencyInjections
         {
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });
+
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

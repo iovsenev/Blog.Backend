@@ -28,10 +28,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasColumnName("phone");
         });
 
-        //builder.Property(u => u.Phone)
-        //    .IsRequired()
-        //    .HasColumnName("phone");
-
         builder.ComplexProperty(u => u.Email, b =>
         {
             b.Property(e => e.Email)
@@ -54,5 +50,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasColumnName("second_name");
         builder.Property(u => u.BirthDate)
             .HasColumnName("birth_date");
+
+        builder.HasMany(u => u.Articles)
+            .WithOne(a => a.Author)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

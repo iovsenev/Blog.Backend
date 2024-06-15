@@ -1,14 +1,15 @@
 ﻿using Blog.Domain.Entity.Read;
+using Blog.Application.Interfaces;
 using Blog.Infrastructure.Configurations.Write;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure.DbContexts;
 
-public class ReadDbContext : DbContext
+public class ReadDbContext : DbContext, IReadDbContext
 {
     public ReadDbContext(DbContextOptions<ReadDbContext> options) : base(options) { }
 
-    public DbSet<UserDto> Users => Set<UserDto>();
+    public DbSet<UserDto> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,6 +21,7 @@ public class ReadDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         base.OnConfiguring(optionsBuilder);
     }

@@ -40,5 +40,9 @@ public class UserDtoEntityConfiguration : IEntityTypeConfiguration<UserDto>
             .HasColumnName("second_name");
         builder.Property(u => u.BirthDate)
             .HasColumnName("birth_date");
+
+        builder.HasMany(u => u.Articles)
+            .WithOne(a => a.Author)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

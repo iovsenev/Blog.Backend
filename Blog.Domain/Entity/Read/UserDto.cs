@@ -12,4 +12,6 @@ public class UserDto
     public string LastName { get; set; } = string.Empty;
     public string SecondName { get; set; } = string.Empty;
     public DateTimeOffset? BirthDate { get; set; }
+
+    public ICollection<ArticleDto> Articles { get; set; } = [];
 }

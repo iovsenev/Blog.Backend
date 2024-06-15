@@ -1,4 +1,6 @@
-﻿using Blog.Domain.Common;
+﻿using Blog.Application.Interfaces.Services;
+using Blog.Application.Services.Users.Create;
+using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
 using Blog.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Mvc;
@@ -7,14 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Blog.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class UserController: ControllerBase
+public class UserController : ControllerBase
 {
-    private readonly WriteDbContext _writeContext;
     private readonly ReadDbContext _readContext;
 
     public UserController(WriteDbContext writeContext, ReadDbContext readContext)
     {
-        _writeContext = writeContext;
         _readContext = readContext;
     }
 
@@ -22,35 +22,23 @@ public class UserController: ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var entites = await _readContext.Users.ToListAsync();
-        
+
         return Ok(entites);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] CreateUserRequest request)
+        [FromServices] IUserService<CreateUserRequest, Guid> userService,
+        [FromBody] CreateUserRequest request,
+        CancellationToken token)
     {
-        var user = UserEntity.Create(
-            request.userName,
-            request.email,
-            request.passwordHash,
-            request.phoneNumber);
 
-        if (user.IsFailure)
-            return BadRequest(user.Error);
+        var result = await userService.Handle(request, token);
 
-        await _writeContext.Users.AddAsync(user.Value);
-        var result = await _writeContext.SaveChangesAsync();
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        if (result == 0)
-            return BadRequest(ErrorFactory.General.AddingFalling("bad adding"));
-
-        return Ok();
+        return Ok(result.Value);
     }
 }
 
-public record CreateUserRequest(
-        string userName,
-        string email,
-        string passwordHash,
-        string phoneNumber);
