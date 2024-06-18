@@ -7,11 +7,12 @@ public static class UserExtensions
 {
     public static ShortUserViewModel ToShortViewModel(this UserDto user)
     {
-        var model = new ShortUserViewModel(
+        return new ShortUserViewModel(
             user.Id,
             user.UserName,
             user.RegisterDate.Date,
-            )
+            user.GetFullName()
+            );
     }
 
     public static string GetFullName(this UserDto user)
@@ -23,5 +24,7 @@ public static class UserExtensions
         if (string.IsNullOrEmpty($"{user.FirstName[0].ToString().ToUpper()}{user.FirstName.Skip(1).ToString().ToLower()}"))
             return fullname.ToString();
         fullname.Append($" {user.LastName[0].ToString().ToUpper()}.");
+
+        return fullname.ToString();
     }
 }

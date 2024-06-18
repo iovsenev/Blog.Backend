@@ -9,4 +9,7 @@ public class ArticleDto
     public string Text { get; set; } = string.Empty;
 
     public UserDto Author { get; set; }
+
+    public ICollection<CommentDto> Comments { get; set; }
+    public ICollection<TagDto> Tags { get; set; }
 }

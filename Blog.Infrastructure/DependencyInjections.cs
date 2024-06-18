@@ -14,7 +14,7 @@ public static class DependencyInjections
         {
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });
-        services.AddDbContext<ReadDbContext>(opt =>
+        services.AddDbContext<IReadDbContext, ReadDbContext>(opt =>
         {
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });

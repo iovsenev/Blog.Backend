@@ -54,5 +54,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasMany(u => u.Articles)
             .WithOne(a => a.Author)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(u => u.Comments)
+            .WithOne(c => c.Author)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

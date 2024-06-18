@@ -1,4 +1,6 @@
-﻿namespace Blog.Domain.Entity.Read;
+﻿using Blog.Domain.Entity.Write;
+
+namespace Blog.Domain.Entity.Read;
 public class UserDto
 {
     public Guid Id { get; set; }
@@ -14,4 +16,5 @@ public class UserDto
     public DateTimeOffset? BirthDate { get; set; }
 
     public ICollection<ArticleDto> Articles { get; set; } = [];
+    public ICollection<CommentDto> Comments { get; set; } = [];
 }

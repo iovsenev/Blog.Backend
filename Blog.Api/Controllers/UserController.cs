@@ -1,5 +1,7 @@
 ﻿using Blog.Application.Interfaces.Services;
-using Blog.Application.Services.Users.Create;
+using Blog.Application.Models;
+using Blog.Application.Services.Users.Create.Requests;
+using Blog.Application.Services.Users.GetAllUser;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
 using Blog.Infrastructure.DbContexts;
@@ -11,29 +13,37 @@ namespace Blog.Api.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly ReadDbContext _readContext;
+    IWriteUserService _writeUserService;
+    IReadUserService _readUserService;
 
-    public UserController(WriteDbContext writeContext, ReadDbContext readContext)
+    public UserController(
+        IWriteUserService writeService,
+        IReadUserService readService)
     {
-        _readContext = readContext;
+        _readUserService = readService;
+        _writeUserService = writeService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery]
+        GetEntityModelByPageRequest request, 
+        CancellationToken token)
     {
-        var entites = await _readContext.Users.ToListAsync();
+        var entities = await _readUserService.GetAllUserByPage(request, token);
 
-        return Ok(entites);
+        if(entities.IsFailure)
+            return BadRequest(entities.Error);
+
+        return Ok(entities.Value);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromServices] IUserService<CreateUserRequest, Guid> userService,
         [FromBody] CreateUserRequest request,
         CancellationToken token)
     {
-
-        var result = await userService.Handle(request, token);
+        var result = await _writeUserService.CreateUser(request, token);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

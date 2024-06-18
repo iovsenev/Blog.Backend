@@ -27,5 +27,11 @@ public class ArticleEntityConfiguration : IEntityTypeConfiguration<ArticleEntity
         builder.HasOne(a => a.Author)
             .WithMany(u => u.Articles);
 
+        builder.HasMany(a => a.Comments)
+            .WithOne(c => c.Article)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(a => a.Tags)
+            .WithMany(t => t.Articles);
     }
 }

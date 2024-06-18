@@ -35,6 +35,10 @@ public class UserEntity
     private IReadOnlyCollection<ArticleEntity> _articles = [];
     public ICollection<ArticleEntity> Articles => _articles.ToList();
 
+
+    private IReadOnlyCollection<CommentEntity> _comments = [];
+    public ICollection<CommentEntity> Comments => _comments.ToList();
+
     public static Result<UserEntity, Error> Create(
         string userName,
         string email,

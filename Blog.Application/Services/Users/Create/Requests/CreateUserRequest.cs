@@ -1,4 +1,4 @@
-﻿namespace Blog.Application.Services.Users.Create;
+﻿namespace Blog.Application.Services.Users.Create.Requests;
 
 public record CreateUserRequest(
         string UserName,

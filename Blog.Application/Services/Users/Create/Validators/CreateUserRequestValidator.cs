@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Blog.Application.Services.Users.Create.Requests;
+using FluentValidation;
 
-namespace Blog.Application.Services.Users.Create;
+namespace Blog.Application.Services.Users.Create.Validators;
 public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 {
     public CreateUserRequestValidator()

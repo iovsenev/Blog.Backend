@@ -20,6 +20,12 @@ public class ArticleEntity
 
     public UserEntity Author { get; private set; }
 
+    private IReadOnlyList<CommentEntity> _comments = [];
+    public ICollection<CommentEntity> Comments => _comments.ToList();
+
+    private IReadOnlyList<TagEntity> _tags = [];
+    public ICollection<TagEntity> Tags => _tags.ToList();
+
     public static Result <ArticleEntity, Error> Create(string  title, string description, string text)
     {
         title = title.Trim();
