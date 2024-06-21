@@ -7,9 +7,10 @@ public class ArticleDto
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
+    public DateTimeOffset CreatedDate { get; set; }
 
     public UserDto Author { get; set; }
 
-    public ICollection<CommentDto> Comments { get; set; }
-    public ICollection<TagDto> Tags { get; set; }
+    public ICollection<CommentDto> Comments { get; set; } = [];
+    public ICollection<TagDto> Tags { get; set; } = [];
 }

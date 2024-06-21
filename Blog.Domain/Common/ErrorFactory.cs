@@ -3,6 +3,11 @@ public static class ErrorFactory
 {
     public static class General
     {
+        public static Error InternalServer(string message)
+        {
+            return new Error("internal.server", message);
+        }
+
         public static Error NotFound(string? message = null)
         {
             message = message == null

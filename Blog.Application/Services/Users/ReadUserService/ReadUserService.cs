@@ -1,23 +1,24 @@
 ﻿using Blog.Application.EntityExtensions;
 using Blog.Application.Interfaces;
 using Blog.Application.Interfaces.Services;
-using Blog.Application.Models;
+using Blog.Application.Models.Requests;
+using Blog.Application.Models.Responses;
+using Blog.Application.Models.ViewModels;
 using Blog.Domain.Common;
-using Blog.Domain.Entity.Read;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Application.Services.Users.GetAllUser;
-public class GetAllUsersByPageService : IReadUserService
+namespace Blog.Application.Services.Users.ReadUserService;
+public class ReadUserService : IReadUserService
 {
     private readonly IReadDbContext _context;
 
-    public GetAllUsersByPageService(IReadDbContext context)
+    public ReadUserService(IReadDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Result<GetAllUsersByPageResponse, Error>> GetAllUserByPage(
+    public async Task<Result<GetAllUsersByPageResponse, Error>> GetAllUserByPageAsync(
         GetEntityModelByPageRequest request,
         CancellationToken token)
     {
@@ -34,7 +35,7 @@ public class GetAllUsersByPageService : IReadUserService
         return new GetAllUsersByPageResponse(result, count);
     }
 
-    public async Task<Result<UserDto, Error>> GetUserById(Guid id, CancellationToken token)
+    public async Task<Result<UserPreviewViewModel, Error>> GetUserByIdAsync(Guid id, CancellationToken token)
     {
         if (id.Equals(Guid.Empty))
             return ErrorFactory.General.InValid($"This id: {id} is not valid");
@@ -47,6 +48,6 @@ public class GetAllUsersByPageService : IReadUserService
         if (entity is null)
             return ErrorFactory.General.NotFound($"Entity with id: {id} not found.");
 
-        return entity;
+        return entity.ToPreviewViewModel();
     }
 }

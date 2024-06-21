@@ -2,11 +2,11 @@
 public class ResponseFormat
 {
     public object? Result { get; }
-    public Dictionary<string, string[]>? Errors { get; }
+    public object? Errors { get; }
     public DateTime TimeGenerated { get; }
 
     private ResponseFormat(object? result,
-        Dictionary<string, string[]>? errors)
+            object? errors)
     {
         Result = result;
         Errors = errors;
@@ -18,7 +18,7 @@ public class ResponseFormat
         return new(result, null);
     }
 
-    public static ResponseFormat Error(Dictionary<string, string[]>? errors)
+    public static ResponseFormat Error(object? errors)
     {
         return new(null, errors);
     }

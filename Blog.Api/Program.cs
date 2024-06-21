@@ -1,3 +1,4 @@
+using Blog.Api.Middleware;
 using Blog.Application;
 using Blog.Infrastructure;
 using FluentValidation;
@@ -19,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

@@ -12,7 +12,7 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
         if (validationProblemDetails is null)
             return new BadRequestObjectResult("Wrong something");
 
-        var errors = validationProblemDetails.Errors.ToDictionary();
+        var errors = validationProblemDetails.Errors/*.ToDictionary()*/;
 
         var envelope = ResponseFormat.Error(errors);
 

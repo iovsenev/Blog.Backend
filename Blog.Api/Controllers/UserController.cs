@@ -1,17 +1,10 @@
-﻿using Blog.Application.Interfaces.Services;
-using Blog.Application.Models;
-using Blog.Application.Services.Users.Create.Requests;
-using Blog.Application.Services.Users.GetAllUser;
-using Blog.Domain.Common;
-using Blog.Domain.Entity.Write;
-using Blog.Infrastructure.DbContexts;
+﻿using Blog.Api.Controllers.Common;
+using Blog.Application.Interfaces.Services;
+using Blog.Application.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Controllers;
-[ApiController]
-[Route("[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
     IWriteUserService _writeUserService;
     IReadUserService _readUserService;
@@ -30,7 +23,7 @@ public class UserController : ControllerBase
         GetEntityModelByPageRequest request, 
         CancellationToken token)
     {
-        var entities = await _readUserService.GetAllUserByPage(request, token);
+        var entities = await _readUserService.GetAllUserByPageAsync(request, token);
 
         if(entities.IsFailure)
             return BadRequest(entities.Error);
@@ -43,7 +36,45 @@ public class UserController : ControllerBase
         [FromBody] CreateUserRequest request,
         CancellationToken token)
     {
-        var result = await _writeUserService.CreateUser(request, token);
+        var result = await _writeUserService.CreateUserAsync(request, token);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost]
+    [Route("[action]")]
+    public async Task<IActionResult> PostArticle(
+        [FromBody]
+        CreateArticleRequest request,
+        CancellationToken token)
+    {
+        var result = await _writeUserService.CreateArticleAsync(request, token);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken token)
+    {
+        var result = await _readUserService.GetUserByIdAsync(id, token);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
+    }
+
+    [HttpPost]
+    [Route("[action]")]
+    public async Task<IActionResult> PostComment(
+        [FromBody]
+        CreateCommentRequest request,
+        CancellationToken token)
+    {
+        var result = await _writeUserService.CreateCommentAsync(request, token);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

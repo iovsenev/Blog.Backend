@@ -23,6 +23,8 @@ public class ArticleDtoEntityConfiguration : IEntityTypeConfiguration<ArticleDto
         builder.Property(x => x.Text)
             .IsRequired()
             .HasColumnName("text");
+        builder.Property(a => a.CreatedDate)
+            .HasColumnName("created_at");
 
         builder.HasOne(a => a.Author)
             .WithMany(u => u.Articles);

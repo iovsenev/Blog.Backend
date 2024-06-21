@@ -1,4 +1,4 @@
-﻿using Blog.Application.Models;
+﻿using Blog.Application.Models.ViewModels;
 using Blog.Domain.Entity.Read;
 using System.Text;
 
@@ -10,12 +10,11 @@ public static class UserExtensions
         return new ShortUserViewModel(
             user.Id,
             user.UserName,
-            user.RegisterDate.Date,
-            user.GetFullName()
+            user.RegisterDate.Date
             );
     }
 
-    public static string GetFullName(this UserDto user)
+    private static string GetFullName(this UserDto user)
     {
         if (string.IsNullOrEmpty(user.LastName))
             return "";
@@ -26,5 +25,21 @@ public static class UserExtensions
         fullname.Append($" {user.LastName[0].ToString().ToUpper()}.");
 
         return fullname.ToString();
+    }
+
+    public static UserPreviewViewModel ToPreviewViewModel(this UserDto user)
+    {
+        return new UserPreviewViewModel(
+            user.Id,
+            user.UserName,
+            user.RegisterDate,
+            user.GetFullName(),
+            user.Articles
+                    .Select(a => a.ToShortForUser())
+                    .ToList(),
+            user.Comments
+                    .Select(c => c.ToViewModel())
+                    .ToList(),
+            user.BirthDate);
     }
 }

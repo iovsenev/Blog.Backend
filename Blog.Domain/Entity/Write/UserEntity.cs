@@ -32,11 +32,11 @@ public class UserEntity
     public string SecondName { get; private set; } = string.Empty;
     public DateTimeOffset? BirthDate { get; private set; }
 
-    private IReadOnlyCollection<ArticleEntity> _articles = [];
+    private List<ArticleEntity> _articles = [];
     public ICollection<ArticleEntity> Articles => _articles.ToList();
 
 
-    private IReadOnlyCollection<CommentEntity> _comments = [];
+    private List<CommentEntity> _comments = [];
     public ICollection<CommentEntity> Comments => _comments.ToList();
 
     public static Result<UserEntity, Error> Create(
@@ -61,5 +61,15 @@ public class UserEntity
         //    return phoneResult.Error;
 
         return new UserEntity(userName, emailResult.Value, passwordHash, DateTimeOffset.UtcNow/*, phoneResult.Value*/);
+    }
+
+    public void PostArticle(ArticleEntity article)
+    {
+       _articles.Add(article);
+    }
+
+    public void PostComment(CommentEntity comment)
+    {
+        _comments.Add(comment);
     }
 }

@@ -10,6 +10,8 @@ public class TagEntityConfiguration : IEntityTypeConfiguration<TagEntity>
         builder.ToTable("tags");
 
         builder.HasKey(t => t.Id);
+        builder.HasIndex(t => t.TagName)
+            .IsUnique();
 
         builder.Property(t =>t.Id)
             .IsRequired()

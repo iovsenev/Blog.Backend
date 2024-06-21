@@ -1,5 +1,6 @@
 ﻿using Blog.Application.Interfaces;
 using Blog.Infrastructure.DbContexts;
+using Blog.Infrastructure.Queries;
 using Blog.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,9 @@ public static class DependencyInjections
         });
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<IArticleQueries, ArticleQueries>();
+        services.AddSingleton<SqlConnectionFactory>();
 
         return services;
     }

@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
         return save;
     }
 
-    public async Task<Result<Guid, Error>> Add(UserEntity user, CancellationToken token)
+    public async Task<Result<Guid, Error>> AddAsync(UserEntity user, CancellationToken token)
     {
         var search = await _dbContext.Users.FirstOrDefaultAsync(
             u =>
@@ -46,7 +46,7 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<Result<UserEntity, Error>> GetById(Guid id, CancellationToken token)
+    public async Task<Result<UserEntity, Error>> GetByIdAsync(Guid id, CancellationToken token)
     {
         var entity = await _dbContext.Users.FindAsync(id, token);
 
