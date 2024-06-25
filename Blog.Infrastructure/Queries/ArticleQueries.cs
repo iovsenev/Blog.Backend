@@ -1,4 +1,4 @@
-﻿using Blog.Application.Interfaces;
+﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Models.ViewModels;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Read;

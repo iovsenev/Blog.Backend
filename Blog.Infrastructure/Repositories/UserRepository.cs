@@ -1,4 +1,4 @@
-﻿using Blog.Application.Interfaces;
+﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
 using Blog.Infrastructure.DbContexts;

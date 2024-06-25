@@ -1,4 +1,4 @@
-﻿using Blog.Application.Interfaces;
+﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Infrastructure.DbContexts;
 using Blog.Infrastructure.Queries;
 using Blog.Infrastructure.Repositories;

@@ -1,29 +1,36 @@
 ﻿using Blog.Api.Controllers.Common;
-using Blog.Application.Interfaces.Services;
-using Blog.Application.Models.Requests;
+using Blog.Application.Mediators;
+using Blog.Application.Services.Users.Commands.CreateArticle;
+using Blog.Application.Services.Users.Commands.CreateComment;
+using Blog.Application.Services.Users.Commands.CreateUser;
+using Blog.Application.Services.Users.Queries.GetById;
+using Blog.Application.Services.Users.Queries.GetByPage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
 public class UserController : BaseController
 {
-    IWriteUserService _writeUserService;
-    IReadUserService _readUserService;
+    private readonly IMediator _mediator;
 
     public UserController(
-        IWriteUserService writeService,
-        IReadUserService readService)
+        IMediator mediator)
     {
-        _readUserService = readService;
-        _writeUserService = writeService;
+        _mediator = mediator;
     }
 
+    /// <summary>
+    /// Возвращает список пользователей по страницам и общее количество пользователей в базе. 
+    /// </summary>
+    /// <param name="query">GetUserByPageQuery</param>
+    /// <param name="token">CancelationToken</param>
+    /// <returns>GetAllUsersByPageResponse</returns>
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery]
-        GetEntityModelByPageRequest request, 
+        GetUsersByPageQuery query,
         CancellationToken token)
     {
-        var entities = await _readUserService.GetAllUserByPageAsync(request, token);
+        var entities = await _mediator.Send<GetAllUsersByPageResponse>(query, token);
 
         if(entities.IsFailure)
             return BadRequest(entities.Error);
@@ -33,10 +40,10 @@ public class UserController : BaseController
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] CreateUserRequest request,
+        [FromBody] CreateUserCommand command,
         CancellationToken token)
     {
-        var result = await _writeUserService.CreateUserAsync(request, token);
+        var result = await _mediator.Send(command, token);
 
         if (result.IsFailure)
             return BadRequest(result.Error);
@@ -48,10 +55,10 @@ public class UserController : BaseController
     [Route("[action]")]
     public async Task<IActionResult> PostArticle(
         [FromBody]
-        CreateArticleRequest request,
+        CreateArticleCommand command,
         CancellationToken token)
     {
-        var result = await _writeUserService.CreateArticleAsync(request, token);
+        var result = await _mediator.Send(command , token);
         if (result.IsFailure)
             return BadRequest(result.Error);
         return Ok(result.Value);
@@ -60,7 +67,9 @@ public class UserController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken token)
     {
-        var result = await _readUserService.GetUserByIdAsync(id, token);
+        var query = new GetByIdQuery(id);
+
+        var result = await _mediator.Send<GetByIdResponse>(query, token);
 
         if (result.IsFailure)
             return BadRequest(result.Error);
@@ -71,10 +80,10 @@ public class UserController : BaseController
     [Route("[action]")]
     public async Task<IActionResult> PostComment(
         [FromBody]
-        CreateCommentRequest request,
+        CreateCommentCommand command,
         CancellationToken token)
     {
-        var result = await _writeUserService.CreateCommentAsync(request, token);
+        var result = await _mediator.Send(command, token);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

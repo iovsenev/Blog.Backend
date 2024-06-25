@@ -1,30 +1,85 @@
 ﻿using Blog.Application.Helpers;
 using Blog.Application.Interfaces.Services;
-using Blog.Application.Models.Validators;
-using Blog.Application.Services.Articles.Read;
-using Blog.Application.Services.Users.Create;
-using Blog.Application.Services.Users.ReadUserService;
+using Blog.Application.Mediators;
+using Blog.Application.Services.Users.Commands.CreateUser;
+using Blog.Application.Services.Users.Queries.GetById;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using System.Reflection;
 
 namespace Blog.Application;
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IWriteUserService, WriteUserService>();
-        services.AddScoped<IReadUserService, ReadUserService>();
-        services.AddScoped<IReadArticleService, ReadArticleService>();
-
         services.AddFluentValidationAutoValidation(configuration =>
         {
             configuration.DisableBuiltInModelValidation = true;
             configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
         });
 
-        services.AddValidatorsFromAssembly(typeof(CreateUserRequestValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
+
+        services.AddCommandHandlers(typeof(CreateUserCommandHandler));
+        services.AddQueryHandler(typeof(GetUserByIdQueryHandler));
+
+        services.AddScoped<IMediator, Mediator>();
 
         return services;
+    }
+
+    private static IServiceCollection AddCommandHandlers(this IServiceCollection services, Type assemblyType)
+    {
+        if (assemblyType == null)
+            throw new ArgumentNullException(nameof(assemblyType));
+
+        var assembly = assemblyType.Assembly;
+        var scanType = typeof(ICommandHandler<>);
+
+        RegisterScanTypeWithImplementations(services, assembly, scanType);
+
+        return services;
+    }
+
+    private static IServiceCollection AddQueryHandler(this IServiceCollection services, Type assemblyType)
+    {
+        if (assemblyType == null)
+            throw new ArgumentNullException(nameof(assemblyType));
+
+        var assembly = assemblyType.Assembly;
+        var scanType = typeof(IQueryHandler<,>);
+
+        services.RegisterScanTypeWithImplementations(assembly, scanType);
+
+        return services;
+    }
+
+    private static void RegisterScanTypeWithImplementations(
+        this IServiceCollection services,
+        Assembly assembly,
+        Type typeScan)
+    {
+        var CommandHandlers = ScanTypes(assembly, typeScan);
+
+        foreach (var handler in CommandHandlers)
+        {
+            var abstraction = handler.GetTypeInfo()
+                .ImplementedInterfaces
+                .First(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeScan);
+
+            services.AddScoped(abstraction, handler);
+        }
+    }
+    private static IEnumerable<Type> ScanTypes(Assembly assembly, Type typeToScanFor)
+    {
+        return assembly.GetTypes()
+            .Where(type => type is
+            {
+                IsClass: true,
+                IsAbstract: false
+            } &&
+                           type.GetInterfaces()
+                               .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeToScanFor));
     }
 }

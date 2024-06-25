@@ -1,7 +1,7 @@
 ﻿using Blog.Domain.Entity.Read;
-using Blog.Application.Interfaces;
 using Blog.Infrastructure.Configurations.Write;
 using Microsoft.EntityFrameworkCore;
+using Blog.Application.Interfaces.DbAccess;
 
 namespace Blog.Infrastructure.DbContexts;
 
