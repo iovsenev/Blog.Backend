@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.Entity.Write;
-public class ArticleEntity
+public class ArticleEntity : BaseEntity
 {
     private ArticleEntity() { }
 
@@ -14,7 +14,6 @@ public class ArticleEntity
         CreatedDate = createdDate;
     }
 
-    public Guid Id { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
     public string Text { get; private set; } = string.Empty;

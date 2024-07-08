@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Blog.Domain.Entity.Write;
-public class TagEntity
+public class TagEntity : BaseEntity
 {
     private TagEntity() { }
     private TagEntity(string tagName)
@@ -11,7 +11,6 @@ public class TagEntity
         TagName = tagName;
     }
 
-    public Guid Id { get; private set; }
     public string TagName { get; private set; }
 
     private IReadOnlyList<ArticleEntity> _articles = [];

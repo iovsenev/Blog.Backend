@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Blog.Domain.ValueObject;
 
-public record EmailAddress
+public class EmailAddress : BaseValueObject
 {
     private const string EmailRegex = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)";
 
@@ -23,5 +23,10 @@ public record EmailAddress
             return ErrorFactory.General.InValid("this email is not valid.");
 
         return new EmailAddress(input);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponent()
+    {
+        yield return Email;
     }
 }

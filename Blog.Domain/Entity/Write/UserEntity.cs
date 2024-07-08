@@ -3,7 +3,7 @@ using Blog.Domain.ValueObject;
 using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.Entity.Write;
-public class UserEntity
+public class UserEntity : BaseEntity
 {
     private UserEntity() { }    
     private UserEntity(
@@ -20,7 +20,6 @@ public class UserEntity
         //Phone = number;
     }
 
-    public Guid Id { get; private set; }
     public string UserName { get; private set; }
     public EmailAddress Email { get; private set; }
     public string PasswordHash { get; private set; }

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Blog.Domain.ValueObject;
 
-public record PhoneNumber
+public class PhoneNumber : BaseValueObject
 {
     private const string PhoneRegex = "^((8 |\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
 
@@ -23,5 +23,10 @@ public record PhoneNumber
             return ErrorFactory.General.InValid("this email is not valid.");
 
         return new PhoneNumber(input);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponent()
+    {
+        yield return Phone;
     }
 }
