@@ -7,6 +7,7 @@ namespace Blog.Application.Interfaces.DbAccess;
 public interface IUserRepository
 {
     Task<Result<Guid, Error>> AddAsync(UserEntity user, CancellationToken token);
-    Task<Result<UserEntity, Error>> GetByEmailAsync(EmailAddress email, CancellationToken token);
+    Task<Result<UserEntity, Error>> GetByEmailAsync(string email, CancellationToken token);
     Task<Result<int, Error>> SaveChangesAsync(CancellationToken token);
+    Task<Result<UserEntity, Error>> GetByIdAsync(Guid id, CancellationToken token);
 }

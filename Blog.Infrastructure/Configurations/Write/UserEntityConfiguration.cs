@@ -7,7 +7,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
-        builder.ToTable("authors");
+        builder.ToTable("users");
 
         builder.HasKey(t => t.Id);
 
@@ -22,7 +22,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .IsRequired()
             .HasColumnName("email");
         builder.Property(u => u.PasswordHash)
-            .HasColumnName("password")
+            .HasColumnName("password_hash")
             .IsRequired();
         builder.Property(u => u.UserName)
             .IsRequired()
@@ -55,5 +55,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasMany(u => u.Comments)
             .WithOne(c => c.Author)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(u => u.Role)
+            .WithMany();
     }
 }

@@ -8,7 +8,6 @@ public class WriteDbContext : DbContext
     public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options) { }
 
     public DbSet<UserEntity> Users => Set<UserEntity>();
-    public DbSet<UserEntity> Authors => Set<UserEntity>();
     public DbSet<ArticleEntity> Articles => Set<ArticleEntity>();
     public DbSet<CommentEntity> Comments => Set<CommentEntity>();
     public DbSet<TagEntity> Tags => Set<TagEntity>();

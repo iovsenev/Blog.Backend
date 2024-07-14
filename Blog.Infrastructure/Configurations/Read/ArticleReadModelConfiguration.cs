@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
-public class ArticleDtoEntityConfiguration : IEntityTypeConfiguration<ArticleDto>
+public class ArticleReadModelConfiguration : IEntityTypeConfiguration<ArticleReadModel>
 {
-    public void Configure(EntityTypeBuilder<ArticleDto> builder)
+    public void Configure(EntityTypeBuilder<ArticleReadModel> builder)
     {
         builder.ToTable("articles");
 
@@ -14,24 +14,36 @@ public class ArticleDtoEntityConfiguration : IEntityTypeConfiguration<ArticleDto
         builder.Property(x => x.Id)
             .IsRequired()
             .HasColumnName("id");
+
         builder.Property(x => x.Title)
             .IsRequired()
             .HasColumnName("title");
+
         builder.Property(x => x.Description)
             .IsRequired()
             .HasColumnName("description");
-        builder.Property(x => x.Text)
+
+        builder.Property(x => x.Content)
             .IsRequired()
-            .HasColumnName("text");
+            .HasColumnName("content");
+
         builder.Property(a => a.CreatedDate)
             .HasColumnName("created_at");
+
+        builder.Property(a => a.Rating)
+            .HasColumnName("rating");
+
+        builder.Property(a => a.IsPublished)
+            .HasColumnName("is_pablished");
+
+        builder.Property(a => a.UnderInspection)
+            .HasColumnName("under_inspection");
 
         builder.HasOne(a => a.Author)
             .WithMany(u => u.Articles);
 
         builder.HasMany(a => a.Comments)
-            .WithOne(c => c.Article)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithOne(c => c.Article);
 
         builder.HasMany(a => a.Tags)
             .WithMany(t => t.Articles);

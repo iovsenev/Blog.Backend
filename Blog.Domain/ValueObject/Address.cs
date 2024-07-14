@@ -14,9 +14,14 @@ public class Address : BaseValueObject
 
     public string City { get; private set; }
 
-    private static Result<Address, Error> Create(string country, string city)
+    public static Result<Address, Error> Create(string country, string city)
     {
         return new Address(country, city);
+    }
+
+    public static Address CreateEmpty()
+    {
+        return new("", "");
     }
 
 

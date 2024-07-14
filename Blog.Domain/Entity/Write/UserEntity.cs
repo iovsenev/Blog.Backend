@@ -10,25 +10,29 @@ public class UserEntity : BaseEntity
         string email,
         string passwordHash,
         string userName,
-        DateTimeOffset registerDate)
+        DateTimeOffset registerDate,
+        RoleEntity role)
     {
         Email = email;
         PasswordHash = passwordHash;
         RegisterDate = registerDate;
         UserName = userName;
+        Role = role;
     }
     public string Email { get; private set; }
     public string PasswordHash { get; private set; }
     public string UserName { get; private set; } 
     public DateTimeOffset RegisterDate { get; private set; }
 
-    public string PhoneNumber { get; private set; } = null!;
-    public string FirstName { get; private set; } =null!;
-    public string LastName { get; private set; } = null!;
-    public string SecondName { get; private set; } = null!;
-    public DateTimeOffset? BirthDate { get; private set; } = null!;
+    public string PhoneNumber { get; private set; } = string.Empty;
+    public string FirstName { get; private set; } =string.Empty;
+    public string LastName { get; private set; } = string.Empty;
+    public string SecondName { get; private set; } = string.Empty;
+    public DateTimeOffset? BirthDate { get; private set; } = null;
 
-    public Address Address { get; private set; } = null!;
+    public Address Address { get; private set; } = Address.CreateEmpty();
+
+    public RoleEntity Role { get; private set; }
 
 
 
@@ -42,7 +46,8 @@ public class UserEntity : BaseEntity
     public static Result<UserEntity, Error> Create(
         string emailInput,
         string passwordHash,
-        string? userName)
+        string? userName,
+        RoleEntity role = null!)
     {
         if (string.IsNullOrEmpty(passwordHash.Trim()))
             return ErrorFactory.General.InValid("This password is null or empty");
@@ -61,7 +66,10 @@ public class UserEntity : BaseEntity
             userName = emailResult.Value.Split('@')[0];
        userName = "@" + userName;
 
-        return new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow);
+        if (role is null)
+            role = RoleEntity.User;
+
+        return new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow, role);
     }
 
     public void PostArticle(ArticleEntity article)

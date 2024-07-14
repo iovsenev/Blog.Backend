@@ -7,11 +7,11 @@ using CSharpFunctionalExtensions;
 namespace Blog.Application.Services.Users.Commands.CreateComment;
 public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
 {
-    private readonly IAuthorRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IArticleRepository _articleRepository;
 
     public CreateCommentHandler(
-        IAuthorRepository userRepository,
+        IUserRepository userRepository,
         IArticleRepository articleRepository)
     {
         _userRepository = userRepository;

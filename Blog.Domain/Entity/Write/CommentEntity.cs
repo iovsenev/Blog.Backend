@@ -9,11 +9,11 @@ public class CommentEntity : BaseEntity
         string text,
         DateTimeOffset createdDate)
     {
-        Text = text;
+        Content = text;
         CreateDate = createdDate;
     }
 
-    public string Text { get; private set; }
+    public string Content { get; private set; }
     public DateTimeOffset CreateDate { get; private set; }
 
     public UserEntity Author { get; private set; }

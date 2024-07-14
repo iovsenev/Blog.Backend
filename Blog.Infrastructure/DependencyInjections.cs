@@ -20,10 +20,10 @@ public static class DependencyInjections
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });
 
-        services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IArticleQueries, ArticleQueries>();
+        services.AddScoped<ITagRepository, TagRepository>();
         services.AddSingleton<SqlConnectionFactory>();
 
         return services;

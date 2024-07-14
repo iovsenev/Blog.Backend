@@ -20,11 +20,30 @@ public class ArticleEntityConfiguration : IEntityTypeConfiguration<ArticleEntity
         builder.Property(x => x.Description)
             .IsRequired()
             .HasColumnName("description");
-        builder.Property(x => x.Text)
+        builder.Property(x => x.Content)
             .IsRequired()
-            .HasColumnName("text");
+            .HasColumnName("content");
         builder.Property(a => a.CreatedDate)
             .HasColumnName("created_at");
+
+        builder.Property(a => a.Rating)
+            .IsRequired()
+            .HasDefaultValue(0)
+            .HasColumnType("decimal")
+            .HasColumnName("rating");
+
+        builder.Property(a => a.IsPublished)
+            .IsRequired()
+            .HasDefaultValue(false)
+            .HasColumnType("boolean")
+            .HasColumnName("is_pablished");
+
+        builder.Property(a => a.UnderInspection)
+            .IsRequired()
+            .HasDefaultValue(false)
+            .HasColumnType("boolean")
+            .HasColumnName("under_inspection");
+
 
         builder.HasOne(a => a.Author)
             .WithMany(u => u.Articles);

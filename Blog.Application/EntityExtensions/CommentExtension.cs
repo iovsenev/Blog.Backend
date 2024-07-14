@@ -5,11 +5,11 @@ using System.Net.WebSockets;
 namespace Blog.Application.EntityExtensions;
 public static class CommentExtension
 {
-    public static CommentViewModel ToViewModel(this CommentDto comment)
+    public static CommentViewModel ToViewModel(this CommentReadEntity comment)
     {
         return new CommentViewModel(
             comment.Id,
-            comment.Text,
+            comment.Content,
             comment.CreateDate,
             comment.Author.ToShortViewModel());
     }

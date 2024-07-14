@@ -17,7 +17,7 @@ public class ArticleQueries : IArticleQueries
     }
 
     
-    public async Task<Result<ArticleDto, Error>> GetByIdAsync(Guid id, CancellationToken token)
+    public async Task<Result<ArticleReadModel, Error>> GetByIdAsync(Guid id, CancellationToken token)
     {
         using var connection = _connectionFactory.CreateConnection();
 
@@ -26,12 +26,13 @@ public class ArticleQueries : IArticleQueries
                     	a.id id, 
                     	a.title,
                     	a.description, 
+                        a.content,
                     	a.created_at createdDate,
                     	u.id id,
                     	u.user_name userName,
                     	u.register_date registerDate,
                     	ch.id id,
-                    	ch."text",
+                    	ch.content,
                         ch.create_date createDate,
                     	ch.author_id  id,
                     	ch.user_name userName,
@@ -42,7 +43,7 @@ public class ArticleQueries : IArticleQueries
                     	SELECT 
                     		c.id,	
                     		c.article_id,
-                    		c."text",
+                    		c.content,
                             c.create_date,
                     		u2.id  author_id,
                     		u2.user_name,
@@ -52,14 +53,14 @@ public class ArticleQueries : IArticleQueries
                     WHERE a.id = '{id}'
                     """;
 
-        Dictionary<Guid, ArticleDto> dictionaryArticle = new();
+        Dictionary<Guid, ArticleReadModel> dictionaryArticle = new();
 
         var article = await connection.QueryAsync<
-                        ArticleDto,
-                        AuthorDto,
-                        CommentDto,
-                        AuthorDto,
-                        ArticleDto>(
+                        ArticleReadModel,
+                        UserReadModel,
+                        CommentReadEntity,
+                        UserReadModel,
+                        ArticleReadModel>(
             query,
             (article, user, comment, comment_user) =>
             {

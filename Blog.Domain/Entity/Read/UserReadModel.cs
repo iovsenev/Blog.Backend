@@ -1,0 +1,24 @@
+﻿using Blog.Domain.Entity.Write;
+using Blog.Domain.ValueObject;
+
+namespace Blog.Domain.Entity.Read;
+public class UserReadModel
+{
+    public Guid Id { get; set; }
+    public string Email { get;  set; } =string.Empty;
+    public string PasswordHash { get;  set; } = string.Empty;
+    public string UserName { get;  set; } = string.Empty ;
+    public DateTimeOffset RegisterDate { get;  set; }
+
+    public string PhoneNumber { get;  set; } = null!;
+    public string FirstName { get;  set; } = null!;
+    public string LastName { get;  set; } = null!;
+    public string SecondName { get;  set; } = null!;
+    public DateTimeOffset? BirthDate { get;  set; } = null!;
+
+    public Address Address { get;  set; } = null!;
+
+    public ICollection<ArticleReadModel> Articles { get; set; } =[];
+
+    public ICollection<CommentReadEntity> Comments { get; set; } =[];
+}

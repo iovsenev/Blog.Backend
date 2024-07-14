@@ -4,7 +4,7 @@ using Blog.Domain.Entity.Read;
 namespace Blog.Application.EntityExtensions;
 public static class ArticleExtension
 {
-    public static ArticleShortModelForUser ToShortForUser(this ArticleDto article)
+    public static ArticleShortModelForUser ToShortForUser(this ArticleReadModel article)
     {
         return new ArticleShortModelForUser(
             article.Id,
@@ -13,7 +13,7 @@ public static class ArticleExtension
             article.CreatedDate);
     }
 
-    public static ArticleShortViewModel ToShortViewModel(this ArticleDto article)
+    public static ArticleShortViewModel ToShortViewModel(this ArticleReadModel article)
     {
         return new ArticleShortViewModel(
             article.Id,
@@ -23,13 +23,13 @@ public static class ArticleExtension
             article.Author.ToShortViewModel());
     }
 
-    public static ArticleFullViewModel ToFullViewModel(this ArticleDto article)
+    public static ArticleFullViewModel ToFullViewModel(this ArticleReadModel article)
     {
         return new ArticleFullViewModel(
             article.Id,
             article.Title,
             article.Description,
-            article.Text,
+            article.Content,
             article.CreatedDate,
             article.Author.ToShortViewModel(),
             article.Comments

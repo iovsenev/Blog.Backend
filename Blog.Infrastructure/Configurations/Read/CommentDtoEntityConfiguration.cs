@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
-internal class CommentDtoEntityConfiguration : IEntityTypeConfiguration<CommentDto>
+internal class CommentDtoEntityConfiguration : IEntityTypeConfiguration<CommentReadEntity>
 {
-    public void Configure(EntityTypeBuilder<CommentDto> builder)
+    public void Configure(EntityTypeBuilder<CommentReadEntity> builder)
     {
         builder.ToTable("comments");
 
@@ -13,8 +13,8 @@ internal class CommentDtoEntityConfiguration : IEntityTypeConfiguration<CommentD
 
         builder.Property(c => c.Id)
             .HasColumnName("id");
-        builder.Property(c => c.Text)
-            .HasColumnName("text");
+        builder.Property(c => c.Content)
+            .HasColumnName("content");
 
         builder.HasOne(c => c.Author)
             .WithMany(u => u.Comments);

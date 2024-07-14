@@ -10,14 +10,14 @@ public class ArticleEntity : BaseEntity
     {
         Title = title;
         Description = description;
-        Text = text;
+        Content = text;
         CreatedDate = createdDate;
         _tags.AddRange(tags);
     }
 
     public string Title { get; private set; }
     public string Description { get; private set; } 
-    public string Text { get; private set; } 
+    public string Content { get; private set; } 
     public DateTimeOffset CreatedDate { get; private set; }
 
     public double Rating { get; private set; } = 0;

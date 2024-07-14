@@ -9,10 +9,10 @@ public class ReadDbContext : DbContext, IReadDbContext
 {
     public ReadDbContext(DbContextOptions<ReadDbContext> options) : base(options) { }
 
-    public DbSet<AuthorDto> Users { get; set; }
-    public DbSet<ArticleDto> Articles { get; set; }
-    public DbSet<CommentDto> Comments { get; set; }
-    public DbSet<TagDto> Tags { get; set; }
+    public DbSet<UserReadModel> Users { get; set; }
+    public DbSet<ArticleReadModel> Articles { get; set; }
+    public DbSet<CommentReadEntity> Comments { get; set; }
+    public DbSet<TagReadModel> Tags { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

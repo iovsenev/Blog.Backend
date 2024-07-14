@@ -5,5 +5,5 @@ using CSharpFunctionalExtensions;
 namespace Blog.Application.Interfaces.DbAccess;
 public interface IArticleQueries
 {
-    Task<Result<ArticleDto, Error>> GetByIdAsync(Guid id, CancellationToken token);
+    Task<Result<ArticleReadModel, Error>> GetByIdAsync(Guid id, CancellationToken token);
 }

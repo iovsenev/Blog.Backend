@@ -1,13 +1,10 @@
 ﻿using Blog.Api.Controllers.Common;
-using Blog.Application.Interfaces.Services;
 using Blog.Application.Mediators;
 using Blog.Application.Services.Articles.Queries.GetAll;
 using Blog.Application.Services.Articles.Queries.GetById;
-using Blog.Application.Services.Users.Queries.GetByPage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
-
 public class ArticleController : BaseController
 {
     private readonly IMediator _mediator;

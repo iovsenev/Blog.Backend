@@ -13,8 +13,9 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<CommentEntity
 
         builder.Property(c => c.Id)
             .HasColumnName("id");
-        builder.Property(c => c.Text)
-            .HasColumnName("text");
+        builder.Property(c => c.Content)
+            .IsRequired()
+            .HasColumnName("content");
 
         builder.HasOne(c => c.Author)
             .WithMany(u => u.Comments);

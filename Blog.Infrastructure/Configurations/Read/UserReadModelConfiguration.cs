@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
-public class AuthorDtoEntityConfiguration : IEntityTypeConfiguration<AuthorDto>
+public class UserReadModelConfiguration : IEntityTypeConfiguration<UserReadModel>
 {
-    public void Configure(EntityTypeBuilder<AuthorDto> builder)
+    public void Configure(EntityTypeBuilder<UserReadModel> builder)
     {
-        builder.ToTable("authors");
+        builder.ToTable("users");
 
         builder.HasKey(t => t.Id);
 
@@ -18,35 +18,36 @@ public class AuthorDtoEntityConfiguration : IEntityTypeConfiguration<AuthorDto>
 
         builder.Property(u => u.Id)
             .HasColumnName("id");
-        builder.Property(u => u.UserName)
-            .IsRequired()
-            .HasColumnName("user_name");
         builder.Property(u => u.Email)
-            .IsRequired()
             .HasColumnName("email");
-        builder.Property(u => u.Phone)
-            .HasColumnName("phone");
+        builder.Property(u => u.PasswordHash)
+            .HasColumnName("password_hash");
+        builder.Property(u => u.UserName)
+            .HasColumnName("user_name");
         builder.Property(u => u.RegisterDate)
-            .IsRequired()
             .HasColumnName("register_date");
+
+        builder.Property(u => u.PhoneNumber)
+            .HasColumnName("Phone_number");
         builder.Property(u => u.FirstName)
-            .IsRequired()
             .HasColumnName("first_name");
         builder.Property(u => u.LastName)
-            .IsRequired()
             .HasColumnName("last_name");
         builder.Property(u => u.SecondName)
-            .IsRequired()
             .HasColumnName("second_name");
         builder.Property(u => u.BirthDate)
             .HasColumnName("birth_date");
 
+        builder.ComplexProperty(u => u.Address, b =>
+        {
+            b.Property(a => a.Country).HasColumnName("country");
+            b.Property(a => a.City).HasColumnName("city");
+        });
+
         builder.HasMany(u => u.Articles)
-            .WithOne(a => a.Author)
-            .OnDelete(DeleteBehavior.NoAction);
+            .WithOne(a => a.Author);
 
         builder.HasMany(u => u.Comments)
-            .WithOne(c => c.Author)
-            .OnDelete(DeleteBehavior.NoAction);
+            .WithOne(c => c.Author);
     }
 }

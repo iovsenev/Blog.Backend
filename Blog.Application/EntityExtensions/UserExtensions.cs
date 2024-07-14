@@ -5,7 +5,7 @@ using System.Text;
 namespace Blog.Application.EntityExtensions;
 public static class UserExtensions
 {
-    public static ShortUserViewModel ToShortViewModel(this AuthorDto user)
+    public static ShortUserViewModel ToShortViewModel(this UserReadModel user)
     {
         return new ShortUserViewModel(
             user.Id,
@@ -14,7 +14,7 @@ public static class UserExtensions
             );
     }
 
-    private static string GetFullName(this AuthorDto user)
+    private static string GetFullName(this UserReadModel user)
     {
         if (string.IsNullOrEmpty(user.LastName))
             return "";
@@ -27,7 +27,7 @@ public static class UserExtensions
         return fullname.ToString();
     }
 
-    public static UserPreviewViewModel ToPreviewViewModel(this AuthorDto user)
+    public static UserPreviewViewModel ToPreviewViewModel(this UserReadModel user)
     {
         return new UserPreviewViewModel(
             user.Id,

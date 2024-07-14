@@ -45,12 +45,30 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<Result<UserEntity, Error>> GetByEmailAsync(EmailAddress email, CancellationToken token)
+    public async Task<Result<UserEntity, Error>> GetByEmailAsync(string email, CancellationToken token)
     {
-        var entity = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, token);
+        var entity = await _dbContext.Users
+            .Include(u=>u.Role)
+            .Include(u => u.Articles)
+            .Include(u => u.Comments)
+            .FirstOrDefaultAsync(u => u.Email == email, token);
 
         if (entity is null)
             return ErrorFactory.General.NotFound($"Entity with this id: {email} is not found.");
+
+        return entity;
+    }
+
+    public async Task<Result<UserEntity, Error>> GetByIdAsync(Guid id, CancellationToken token)
+    {
+        var entity = await _dbContext.Users
+            .Include(u => u.Role)
+            .Include(u => u.Articles)
+            .Include(u => u.Comments)
+            .FirstOrDefaultAsync(u => u.Id == id, token);
+
+        if (entity is null)
+            return ErrorFactory.General.NotFound($"Entity whith this id: {id} is not found.");
 
         return entity;
     }

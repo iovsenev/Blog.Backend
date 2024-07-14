@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
-public class TagDtoEntityConfiguration : IEntityTypeConfiguration<TagDto>
+public class TagDtoEntityConfiguration : IEntityTypeConfiguration<TagReadModel>
 {
-    public void Configure(EntityTypeBuilder<TagDto> builder)
+    public void Configure(EntityTypeBuilder<TagReadModel> builder)
     {
         builder.ToTable("tags");
 

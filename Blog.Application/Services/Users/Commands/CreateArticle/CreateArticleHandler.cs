@@ -3,15 +3,14 @@ using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
 using CSharpFunctionalExtensions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Blog.Application.Services.Users.Commands.CreateArticle;
 public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
 {
-    private readonly IAuthorRepository _repository;
+    private readonly IUserRepository _repository;
     private readonly ITagRepository _tagRepository;
 
-    public CreateArticleHandler(IAuthorRepository repository, ITagRepository tagRepository)
+    public CreateArticleHandler(IUserRepository repository, ITagRepository tagRepository)
     {
         _repository = repository;
         _tagRepository = tagRepository;
