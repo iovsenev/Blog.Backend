@@ -26,15 +26,16 @@ public class ArticleQueries : IArticleQueries
                     	a.id id, 
                     	a.title,
                     	a.description, 
-                    	a.created_at,
+                    	a.created_at createdDate,
                     	u.id id,
-                    	u.user_name,
-                    	u.register_date,
+                    	u.user_name userName,
+                    	u.register_date registerDate,
                     	ch.id id,
                     	ch."text",
+                        ch.create_date createDate,
                     	ch.author_id  id,
-                    	ch.user_name,
-                    	ch.register_date 
+                    	ch.user_name userName,
+                    	ch.register_date registerDate
                     FROM articles a 
                     JOIN users u ON u.id = a.author_id
                     LEFT JOIN ( 
@@ -55,9 +56,9 @@ public class ArticleQueries : IArticleQueries
 
         var article = await connection.QueryAsync<
                         ArticleDto,
-                        UserDto,
+                        AuthorDto,
                         CommentDto,
-                        UserDto,
+                        AuthorDto,
                         ArticleDto>(
             query,
             (article, user, comment, comment_user) =>

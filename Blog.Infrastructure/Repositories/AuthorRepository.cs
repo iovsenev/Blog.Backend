@@ -1,18 +1,16 @@
 ﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
-using Blog.Domain.ValueObject;
 using Blog.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure.Repositories;
-
-public class UserRepository : IUserRepository
+public class AuthorRepository : IAuthorRepository
 {
     private readonly WriteDbContext _dbContext;
 
-    public UserRepository(WriteDbContext dbContext)
+    public AuthorRepository(WriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -22,15 +20,17 @@ public class UserRepository : IUserRepository
         var save = await _dbContext.SaveChangesAsync(token);
 
         if (save == 0)
-            return ErrorFactory.General.SaveFalling("Can not be saved");
+            return ErrorFactory.General.SaveFalling("Can not be seved");
 
         return save;
     }
 
     public async Task<Result<Guid, Error>> AddAsync(UserEntity user, CancellationToken token)
     {
-        var search = await _dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Equals(user.Email),
+        var search = await _dbContext.Authors.FirstOrDefaultAsync(
+            u =>
+                u.UserName.Equals(user.UserName)
+                || u.Id == user.Id,
             token);
 
         if (search is not null)
@@ -45,12 +45,12 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<Result<UserEntity, Error>> GetByEmailAsync(EmailAddress email, CancellationToken token)
+    public async Task<Result<UserEntity, Error>> GetByIdAsync(Guid id, CancellationToken token)
     {
-        var entity = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, token);
+        var entity = await _dbContext.Authors.FindAsync(id, token);
 
         if (entity is null)
-            return ErrorFactory.General.NotFound($"Entity with this id: {email} is not found.");
+            return ErrorFactory.General.NotFound($"Entity whith this id: {id} is not found.");
 
         return entity;
     }

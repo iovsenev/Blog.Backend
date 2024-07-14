@@ -1,7 +1,7 @@
 ﻿using Blog.Domain.Entity.Write;
 
 namespace Blog.Domain.Entity.Read;
-public class UserDto
+public class AuthorDto
 {
     public Guid Id { get; set; }
     public string UserName { get; set; }

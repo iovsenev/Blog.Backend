@@ -1,6 +1,5 @@
 ﻿using Blog.Domain.Common;
 using CSharpFunctionalExtensions;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Blog.Domain.Entity.Write;
 public class TagEntity : BaseEntity
@@ -16,7 +15,7 @@ public class TagEntity : BaseEntity
     private IReadOnlyList<ArticleEntity> _articles = [];
     public List<ArticleEntity> Articles => _articles.ToList();
 
-    public Result<TagEntity, Error> Create(string inputTag)
+    public static Result<TagEntity, Error> Create(string inputTag)
     {
         inputTag = inputTag.Trim();
 

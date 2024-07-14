@@ -7,9 +7,9 @@ using CSharpFunctionalExtensions;
 namespace Blog.Application.Services.Users.Commands.CreateUser;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
 {
-    private readonly IUserRepository _repository;
+    private readonly IAuthorRepository _repository;
 
-    public CreateUserCommandHandler(IUserRepository repository)
+    public CreateUserCommandHandler(IAuthorRepository repository)
     {
         _repository = repository;
     }

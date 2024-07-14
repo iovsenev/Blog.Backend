@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Blog.Application.Interfaces.DbAccess;
 public interface IReadDbContext
 {
-    DbSet<UserDto> Users { get; set; }
+    DbSet<AuthorDto> Users { get; set; }
     DbSet<ArticleDto> Articles { get; set; }
     DbSet<CommentDto> Comments { get; set; }
     DbSet<TagDto> Tags { get; set; }

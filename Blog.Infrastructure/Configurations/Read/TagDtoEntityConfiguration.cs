@@ -1,14 +1,18 @@
 ﻿using Blog.Domain.Entity.Read;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
 public class TagDtoEntityConfiguration : IEntityTypeConfiguration<TagDto>
 {
-    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TagDto> builder)
+    public void Configure(EntityTypeBuilder<TagDto> builder)
     {
         builder.ToTable("tags");
 
         builder.HasKey(t => t.Id);
+
+        builder.HasIndex(t => t.TagName)
+            .IsUnique();
 
         builder.Property(t => t.Id)
             .IsRequired()

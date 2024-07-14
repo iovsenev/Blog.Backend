@@ -9,7 +9,7 @@ public class ArticleDto
     public string Text { get; set; } = string.Empty;
     public DateTimeOffset CreatedDate { get; set; }
 
-    public UserDto Author { get; set; }
+    public AuthorDto Author { get; set; }
 
     public ICollection<CommentDto> Comments { get; set; } = [];
     public ICollection<TagDto> Tags { get; set; } = [];

@@ -7,6 +7,6 @@ public class CommentDto
     public string Text { get; set; }
     public DateTimeOffset CreateDate { get; set; }
 
-    public UserDto Author { get; set; }
+    public AuthorDto Author { get; set; }
     public ArticleDto Article { get; set; }
 }

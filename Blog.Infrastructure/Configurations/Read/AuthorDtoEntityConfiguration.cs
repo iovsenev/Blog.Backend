@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Infrastructure.Configurations.Read;
-public class UserDtoEntityConfiguration : IEntityTypeConfiguration<UserDto>
+public class AuthorDtoEntityConfiguration : IEntityTypeConfiguration<AuthorDto>
 {
-    public void Configure(EntityTypeBuilder<UserDto> builder)
+    public void Configure(EntityTypeBuilder<AuthorDto> builder)
     {
-        builder.ToTable("users");
+        builder.ToTable("authors");
 
         builder.HasKey(t => t.Id);
 

@@ -7,29 +7,30 @@ public class UserEntity : BaseEntity
 {
     private UserEntity() { }    
     private UserEntity(
-        string userName,
-        EmailAddress email,
+        string email,
         string passwordHash,
-        DateTimeOffset registerDate
-        /*PhoneNumber number*/)
+        string userName,
+        DateTimeOffset registerDate)
     {
-        UserName = userName;
         Email = email;
         PasswordHash = passwordHash;
         RegisterDate = registerDate;
-        //Phone = number;
+        UserName = userName;
     }
-
-    public string UserName { get; private set; }
-    public EmailAddress Email { get; private set; }
+    public string Email { get; private set; }
     public string PasswordHash { get; private set; }
-    public PhoneNumber Phone { get; private set; } = PhoneNumber.Create("79998887777").Value;
+    public string UserName { get; private set; } 
     public DateTimeOffset RegisterDate { get; private set; }
 
-    public string FirstName { get; private set; } = string.Empty;
-    public string LastName { get; private set; } = string.Empty;
-    public string SecondName { get; private set; } = string.Empty;
-    public DateTimeOffset? BirthDate { get; private set; }
+    public string PhoneNumber { get; private set; } = null!;
+    public string FirstName { get; private set; } =null!;
+    public string LastName { get; private set; } = null!;
+    public string SecondName { get; private set; } = null!;
+    public DateTimeOffset? BirthDate { get; private set; } = null!;
+
+    public Address Address { get; private set; } = null!;
+
+
 
     private List<ArticleEntity> _articles = [];
     public ICollection<ArticleEntity> Articles => _articles.ToList();
@@ -39,27 +40,28 @@ public class UserEntity : BaseEntity
     public ICollection<CommentEntity> Comments => _comments.ToList();
 
     public static Result<UserEntity, Error> Create(
-        string userName,
-        string email,
-        string passwordHash)
+        string emailInput,
+        string passwordHash,
+        string? userName)
     {
-        userName = userName.Trim().ToLower();
-        if (string.IsNullOrEmpty(userName))
-            return ErrorFactory.General.InValid("The user name is not valid.");
+        if (string.IsNullOrEmpty(passwordHash.Trim()))
+            return ErrorFactory.General.InValid("This password is null or empty");
 
-        var emailResult = EmailAddress.Create(email);
+        emailInput = emailInput.Trim();
+
+        if (string.IsNullOrEmpty(emailInput))
+            return ErrorFactory.General.InValid("This email is null or empty");
+
+        var emailResult  = VerifyProperty.VerifyEmail(emailInput);
+
         if (emailResult.IsFailure)
-            return emailResult.Error;
+            return ErrorFactory.General.InValid("This email is not valid");
 
-        passwordHash = passwordHash.Trim();
-        if (string.IsNullOrEmpty(passwordHash))
-            return ErrorFactory.General.InValid("The password is not valid");
+        if (string.IsNullOrEmpty(userName.Trim()))
+            userName = emailResult.Value.Split('@')[0];
+       userName = "@" + userName;
 
-        //var phoneResult = PhoneNumber.Create(phoneNumber);
-        //if (phoneResult.IsFailure)
-        //    return phoneResult.Error;
-
-        return new UserEntity(userName, emailResult.Value, passwordHash, DateTimeOffset.UtcNow/*, phoneResult.Value*/);
+        return new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow);
     }
 
     public void PostArticle(ArticleEntity article)
