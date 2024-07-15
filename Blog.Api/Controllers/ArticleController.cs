@@ -5,15 +5,26 @@ using Blog.Application.Services.Articles.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
+/// <summary>
+/// Контроллер работы со статьями.
+/// </summary>
 public class ArticleController : BaseController
 {
     private readonly IMediator _mediator;
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mediator"></param>
     public ArticleController(IMediator mediator)
     {
         _mediator = mediator;
     }
-
+    /// <summary>
+    /// Получения списка статей по страницам и общего числа статей.
+    /// </summary>
+    /// <param name="query">Запрос по страницам по умолчанию имеет значения pageIndex = 1 pageSize = 10</param>
+    /// <param name="cancellationToken">Cancelation token</param>
+    /// <returns>Список ArticleShortViewModel</returns>
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery]
@@ -27,14 +38,19 @@ public class ArticleController : BaseController
 
         return Ok(response.Value);
     }
-
+    /// <summary>
+    /// Получения одной статьи по уникальному идентификатору статьи
+    /// </summary>
+    /// <param name="id">Уникальный Id пользователя</param>
+    /// <param name="cancelationToken">Cancellation Token</param>
+    /// <returns>ArticleFullViewModel</returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(
         Guid id, 
-        CancellationToken token)
+        CancellationToken cancelationToken)
     {
         var query = new GetArticleByIdQuery(id);
-        var result = await _mediator.Send<GetArticleByIdResponse>(query, token);
+        var result = await _mediator.Send<GetArticleByIdResponse>(query, cancelationToken);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

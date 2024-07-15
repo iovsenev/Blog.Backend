@@ -16,7 +16,7 @@ public class UserReadModel
     public string SecondName { get;  set; } = null!;
     public DateTimeOffset? BirthDate { get;  set; } = null!;
 
-    public Address Address { get;  set; } = null!;
+    public AddressValue Address { get;  set; } = null!;
 
     public ICollection<ArticleReadModel> Articles { get; set; } =[];
 

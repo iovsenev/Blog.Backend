@@ -18,7 +18,7 @@ public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
         _articleRepository = articleRepository;
     }
 
-    public async Task<Result<Guid, Error>> HandleAsync(CreateCommentCommand command, CancellationToken token)
+    public async Task<Result<string, Error>> HandleAsync(CreateCommentCommand command, CancellationToken token)
     {
         var author = await _userRepository.GetByIdAsync(command.AuthorId, token);
         if (author.IsFailure)
@@ -40,6 +40,6 @@ public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
         if (result.IsFailure)
             return result.Error;
 
-        return comment.Value.Id;
+        return comment.Value.Id.ToString();
     }
 }

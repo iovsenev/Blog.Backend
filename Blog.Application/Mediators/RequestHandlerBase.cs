@@ -19,7 +19,7 @@ public abstract class RequestHandlerWrapper<TResponse> : RequestHandlerBase
 
 public abstract class RequestHandlerWrapper : RequestHandlerBase
 {
-    public abstract Task<Result<Guid, Error>> HandleAsync(ICommand command, IServiceProvider provider, CancellationToken token);
+    public abstract Task<Result<string, Error>> HandleAsync(ICommand command, IServiceProvider provider, CancellationToken token);
 }
 
 public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrapper<TResponse> where TRequest : IQuery
@@ -40,9 +40,9 @@ public class RequestHandlerWrapperImpl<TRequest> : RequestHandlerWrapper where T
 {
     public override async Task<Result<object?, Error>> HandleAsync(object request, IServiceProvider provider, CancellationToken token) =>
         await HandleAsync((TRequest)request, provider, token).ConfigureAwait(false);
-    public override Task<Result<Guid, Error>> HandleAsync(ICommand command, IServiceProvider provider, CancellationToken token)
+    public override Task<Result<string, Error>> HandleAsync(ICommand command, IServiceProvider provider, CancellationToken token)
     {
-        Task<Result<Guid, Error>> Handler() => provider.GetRequiredService<ICommandHandler<TRequest>>()
+        Task<Result<string, Error>> Handler() => provider.GetRequiredService<ICommandHandler<TRequest>>()
             .HandleAsync((TRequest)command, token);
 
         var result = Handler();

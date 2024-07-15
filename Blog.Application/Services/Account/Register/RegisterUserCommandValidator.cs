@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 
-namespace Blog.Application.Services.Users.Commands.CreateUser;
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+namespace Blog.Application.Services.Account.Register;
+public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {
-    public CreateUserCommandValidator()
+    public RegisterUserCommandValidator()
     {
         RuleFor(u => u.Email)
             .EmailAddress()
@@ -12,9 +12,8 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
         RuleFor(u => u.Password)
             .NotEmpty()
             .NotNull()
-            .MinimumLength(8);
+            .MinimumLength(5);
         RuleFor(u => u.UserName)
-            .NotEmpty()
             .NotNull();
     }
 }

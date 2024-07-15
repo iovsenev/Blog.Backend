@@ -13,7 +13,7 @@ internal static class VerifyProperty
         emailInput = emailInput.Trim().ToLower();
 
         if (string.IsNullOrEmpty(emailInput) && !Regex.IsMatch(emailInput, EmailRegex))
-            ErrorFactory.General.InValid("this email is not valid.");
+            ErrorFactory.General.InValid("This email is not valid.");
 
         return emailInput;
 

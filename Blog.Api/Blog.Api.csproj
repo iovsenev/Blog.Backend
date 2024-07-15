@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>D:\WorkAndLearning\beckendLearning\Projects\Blog\BlogApp\BlogApiDoc.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

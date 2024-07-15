@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<Result<UserEntity, Error>> GetByEmailAsync(string email, CancellationToken token);
     Task<Result<int, Error>> SaveChangesAsync(CancellationToken token);
     Task<Result<UserEntity, Error>> GetByIdAsync(Guid id, CancellationToken token);
+    Task<bool> IsUniqueUser(string? userName = null, string? email = null, CancellationToken token = default);
 }

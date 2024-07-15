@@ -15,7 +15,7 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
         RuleFor(a => a.Description)
             .NotNull()
             .NotEmpty();
-        RuleFor(a => a.Text)
+        RuleFor(a => a.Content)
             .NotNull()
             .NotEmpty();
         RuleFor(a => a.Tags)

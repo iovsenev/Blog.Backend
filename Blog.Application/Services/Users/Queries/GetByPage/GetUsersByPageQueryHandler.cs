@@ -17,7 +17,9 @@ public class GetUsersByPageQueryHandler : IQueryHandler<GetUsersByPageQuery, Get
 
     public async Task<Result<GetAllUsersByPageResponse, Error>> HandleAsync(GetUsersByPageQuery query, CancellationToken token)
     {
-        var users = _context.Users;
+        var users = _context.Users
+            .Include(u => u.Articles)
+            .Where(u => u.Articles.Count > 0);
 
         var count = users.Count();
 

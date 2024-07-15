@@ -32,7 +32,7 @@ public class Mediator : IMediator
         return await handler.HandleAsync(request, _provider, token);
     }
 
-    public async Task<Result<Guid, Error>> Send(ICommand command, CancellationToken token = default)
+    public async Task<Result<string, Error>> Send(ICommand command, CancellationToken token = default)
     {
         if (command == null)
         {

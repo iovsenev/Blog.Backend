@@ -1,7 +1,7 @@
 ﻿using Blog.Application.Helpers;
 using Blog.Application.Interfaces.Services;
 using Blog.Application.Mediators;
-using Blog.Application.Services.Users.Commands.CreateUser;
+using Blog.Application.Services.Account.Register;
 using Blog.Application.Services.Users.Queries.GetById;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,9 +19,9 @@ public static class DependencyInjection
             configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
         });
 
-        services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(RegisterUserCommandValidator).Assembly);
 
-        services.AddCommandHandlers(typeof(CreateUserCommandHandler));
+        services.AddCommandHandlers(typeof(RegisterUserHandler));
         services.AddQueryHandler(typeof(GetUserByIdQueryHandler));
 
         services.AddScoped<IMediator, Mediator>();

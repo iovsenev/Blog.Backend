@@ -16,7 +16,7 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         _tagRepository = tagRepository;
     }
 
-    public async Task<Result<Guid, Error>> HandleAsync(CreateArticleCommand command, CancellationToken token)
+    public async Task<Result<string, Error>> HandleAsync(CreateArticleCommand command, CancellationToken token)
     {
         var author = await _repository.GetByIdAsync(command.AuthorId, token);
         if (author.IsFailure)
@@ -26,7 +26,7 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         if (tags.IsFailure)
             return tags.Error;
 
-        var article = ArticleEntity.Create(command.Title, command.Description, command.Text, tags.Value);
+        var article = ArticleEntity.Create(command.Title, command.Description, command.Content, tags.Value);
 
         if (article.IsFailure)
             return article.Error;
@@ -38,7 +38,7 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         if (result.IsFailure)
             return result.Error;
 
-        return article.Value.Id;
+        return article.Value.Id.ToString();
     }
 
     private async Task<Result<IEnumerable<TagEntity>, Error>> GetTags(ICollection<string> tags, CancellationToken token)

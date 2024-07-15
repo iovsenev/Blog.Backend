@@ -2,9 +2,9 @@
 using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.ValueObject;
-public class Address : BaseValueObject
+public class AddressValue : BaseValueObject
 {
-    private Address(string country, string city)
+    private AddressValue(string country, string city)
     {
         Country = country;
         City = city;
@@ -14,14 +14,14 @@ public class Address : BaseValueObject
 
     public string City { get; private set; }
 
-    public static Result<Address, Error> Create(string country, string city)
+    public static Result<AddressValue, Error> Create(string country, string city)
     {
-        return new Address(country, city);
+        return new AddressValue(country, city);
     }
 
-    public static Address CreateEmpty()
+    public static AddressValue CreateEmpty()
     {
-        return new("", "");
+        return new AddressValue("", "");
     }
 
 

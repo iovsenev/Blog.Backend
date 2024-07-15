@@ -30,7 +30,7 @@ public class UserEntity : BaseEntity
     public string SecondName { get; private set; } = string.Empty;
     public DateTimeOffset? BirthDate { get; private set; } = null;
 
-    public Address Address { get; private set; } = Address.CreateEmpty();
+    public AddressValue Address { get; private set; } = AddressValue.CreateEmpty();
 
     public RoleEntity Role { get; private set; }
 
@@ -60,7 +60,7 @@ public class UserEntity : BaseEntity
         var emailResult  = VerifyProperty.VerifyEmail(emailInput);
 
         if (emailResult.IsFailure)
-            return ErrorFactory.General.InValid("This email is not valid");
+            return emailResult.Error;
 
         if (string.IsNullOrEmpty(userName.Trim()))
             userName = emailResult.Value.Split('@')[0];

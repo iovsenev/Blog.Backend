@@ -6,4 +6,4 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Blog.Application.Services.Account.Login;
-public record LoginRequest (string Email, string Password) : ICommand;
+public record LoginUserCommand (string Email, string Password) : ICommand;

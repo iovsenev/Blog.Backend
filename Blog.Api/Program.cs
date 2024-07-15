@@ -1,12 +1,15 @@
 using Blog.Api.Middleware;
 using Blog.Application;
-using Blog.Domain.Entity.Write;
 using Blog.Infrastructure;
 using Blog.Infrastructure.DbContexts;
-using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
@@ -21,9 +24,72 @@ builder.Services.AddCors(opt =>
     });
 });
 
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.SaveToken = true;
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Blog",
+        Description = "New blog in internet",
+        Contact = new OpenApiContact
+        {
+            Name = "IOvsenev",
+            Email = "Ovsenev.Ilya@yandex.ru",
+        },
+
+    });
+
+    var basePath = AppContext.BaseDirectory;
+
+    var xmlPath = Path.Combine(basePath, "BlogApiDoc.xml");
+    opt.IncludeXmlComments(xmlPath);
+
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWt",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Scheme = "Bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -38,9 +104,9 @@ if (app.Environment.IsDevelopment())
 
     await dbContext.Database.MigrateAsync();
 
-    var admin = UserEntity.Create("admin@admin.admin", adminHash, "admin", RoleEntity.Admin);
-    await dbContext.Users.AddAsync(admin.Value);
-    await dbContext.SaveChangesAsync();
+    //var admin = UserEntity.Create("admin@admin.admin", adminHash, "admin", RoleEntity.Admin);
+    //await dbContext.Users.AddAsync(admin.Value);
+    //await dbContext.SaveChangesAsync();
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -49,6 +115,7 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

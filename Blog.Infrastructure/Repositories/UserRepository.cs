@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
     public async Task<Result<Guid, Error>> AddAsync(UserEntity user, CancellationToken token)
     {
         var search = await _dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Equals(user.Email),
+            u => u.Email.Equals(user.Email) || u.UserName.Equals(user.UserName),
             token);
 
         if (search is not null)
@@ -45,10 +45,19 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
+    public async Task<bool> IsUniqueUser(string? userName = null, string? email =null, CancellationToken token = default)
+    {
+        var entity = await _dbContext.Users.FirstOrDefaultAsync(
+            u => u.Email.Equals(email) || u.UserName.Equals(userName),
+            token);
+
+            return entity is not null ? false : true;
+    }
+
     public async Task<Result<UserEntity, Error>> GetByEmailAsync(string email, CancellationToken token)
     {
         var entity = await _dbContext.Users
-            .Include(u=>u.Role)
+            .Include(u => u.Role)
             .Include(u => u.Articles)
             .Include(u => u.Comments)
             .FirstOrDefaultAsync(u => u.Email == email, token);
