@@ -5,7 +5,7 @@ using Blog.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Infrastructure.Repositories;
+namespace Blog.Infrastructure.Repositories.WriteRepositories;
 public class TagRepository : ITagRepository
 {
     private readonly WriteDbContext _context;
@@ -17,7 +17,7 @@ public class TagRepository : ITagRepository
 
     public async Task<Result<TagEntity, Error>> GetByTagNameAsync(string tagName, CancellationToken ct)
     {
-        var tagResult = await _context.Tags.FirstOrDefaultAsync(t => t.TagName == tagName,ct );
+        var tagResult = await _context.Tags.FirstOrDefaultAsync(t => t.TagName == tagName, ct);
 
         return tagResult is null ? ErrorFactory.General.NotFound($"Entity with {tagName} not found.") : tagResult;
     }

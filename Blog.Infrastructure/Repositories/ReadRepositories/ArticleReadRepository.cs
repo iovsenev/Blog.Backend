@@ -1,23 +1,53 @@
 ﻿using Blog.Application.Interfaces.DbAccess;
-using Blog.Application.Models.ViewModels;
+using Blog.Application.Models;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Read;
 using Blog.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Infrastructure.Queries;
-public class ArticleQueries : IArticleQueries
+namespace Blog.Infrastructure.Repositories.ReadRepositories;
+public class ArticleReadRepository : IArticleReadRepository
 {
+    private readonly ReadDbContext _context;
     private readonly SqlConnectionFactory _connectionFactory;
 
-    public ArticleQueries(SqlConnectionFactory connectionFactory)
+    public ArticleReadRepository(ReadDbContext context, SqlConnectionFactory connectionFactory)
     {
+        _context = context;
         _connectionFactory = connectionFactory;
     }
 
-    
-    public async Task<Result<ArticleReadModel, Error>> GetByIdAsync(Guid id, CancellationToken token)
+    public async Task<(ICollection<ArticleReadModel>, int)> GetAllPublish
+        (GetByPage paging,
+        CancellationToken cancellationToken)
+    {
+        var articles = _context.Articles
+            .Include(a => a.Author)
+            .Where(x => x.IsPublished == true);
+
+        var count = articles.Count();
+
+        var result = await articles
+            .Skip((paging.PageIndex - 1) * paging.PageSize)
+            .Take(paging.PageSize)
+            .ToListAsync();
+
+        return (result, count);
+    }
+
+    public async Task<ICollection<ArticleReadModel>> GetAllNonPublish(CancellationToken cancellationToken)
+    {
+        var articles = await _context.Articles
+            .Include(a => a.Author)
+            .Where(x => x.IsPublished == false)
+            .ToListAsync();
+
+        return articles;
+    }
+
+    public async Task<Result<ArticleReadModel, Error>> GetByIdAsync(Guid id, CancellationToken cancelationToken)
     {
         using var connection = _connectionFactory.CreateConnection();
 

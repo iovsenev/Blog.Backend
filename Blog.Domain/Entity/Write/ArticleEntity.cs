@@ -52,4 +52,7 @@ public class ArticleEntity : BaseEntity
     {
         _comments.Add(comment);
     }
+
+    public void PublishArticle(bool isPosted) =>
+        IsPublished = isPosted;
 }

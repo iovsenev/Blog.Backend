@@ -4,6 +4,7 @@ using Blog.Application.Mediators;
 using Blog.Application.Services.Account.Register;
 using Blog.Application.Services.Users.Queries.GetById;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
@@ -11,8 +12,10 @@ using System.Reflection;
 namespace Blog.Application;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
+
         services.AddFluentValidationAutoValidation(configuration =>
         {
             configuration.DisableBuiltInModelValidation = true;
@@ -25,6 +28,7 @@ public static class DependencyInjection
         services.AddQueryHandler(typeof(GetUserByIdQueryHandler));
 
         services.AddScoped<IMediator, Mediator>();
+        services.AddScoped<CustomTokenHandler>();
 
         return services;
     }
@@ -78,8 +82,7 @@ public static class DependencyInjection
             {
                 IsClass: true,
                 IsAbstract: false
-            } &&
-                           type.GetInterfaces()
-                               .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeToScanFor));
+            } && type.GetInterfaces()
+                  .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeToScanFor));
     }
 }

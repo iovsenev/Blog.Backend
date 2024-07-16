@@ -6,4 +6,5 @@ namespace Blog.Application.Interfaces.DbAccess;
 public interface IArticleRepository
 {
     Task<Result<ArticleEntity, Error>> GetByIdAsync(Guid id, CancellationToken token);
+    Task<Result<int, Error>> SaveChangesAsync(CancellationToken token);
 }

@@ -6,7 +6,7 @@ using Blog.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Infrastructure.Repositories;
+namespace Blog.Infrastructure.Repositories.WriteRepositories;
 
 public class UserRepository : IUserRepository
 {
@@ -45,13 +45,13 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<bool> IsUniqueUser(string? userName = null, string? email =null, CancellationToken token = default)
+    public async Task<bool> IsUniqueUser(string? userName = null, string? email = null, CancellationToken token = default)
     {
         var entity = await _dbContext.Users.FirstOrDefaultAsync(
             u => u.Email.Equals(email) || u.UserName.Equals(userName),
             token);
 
-            return entity is not null ? false : true;
+        return entity is not null ? false : true;
     }
 
     public async Task<Result<UserEntity, Error>> GetByEmailAsync(string email, CancellationToken token)

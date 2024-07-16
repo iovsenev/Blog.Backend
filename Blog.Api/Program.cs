@@ -1,6 +1,8 @@
 using Blog.Api.Middleware;
 using Blog.Application;
+using Blog.Application.Helpers;
 using Blog.Infrastructure;
+using Blog.Infrastructure.DbConfigurations;
 using Blog.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,12 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+var key = builder.Configuration.GetValue<string>($"{JwtOptions.Jwt}:{nameof(JwtOptions.SecretKey)}");
+var configuration = builder.Configuration;
+
+builder.Services.AddInfrastructure(configuration);
+builder.Services.AddApplication(configuration);
 
 builder.Services.AddCors(opt =>
 {
@@ -55,6 +59,7 @@ builder.Services.AddSwaggerGen(opt =>
         {
             Name = "IOvsenev",
             Email = "Ovsenev.Ilya@yandex.ru",
+            Url = new Uri("https://ioworkspace.site/")
         },
 
     });
@@ -99,14 +104,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
-    var adminHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
+    var initData = scope.ServiceProvider.GetRequiredService<InitialData>();
 
-    await dbContext.Database.MigrateAsync();
-
-    //var admin = UserEntity.Create("admin@admin.admin", adminHash, "admin", RoleEntity.Admin);
-    //await dbContext.Users.AddAsync(admin.Value);
-    //await dbContext.SaveChangesAsync();
+    await initData.Invoke();
+    
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();

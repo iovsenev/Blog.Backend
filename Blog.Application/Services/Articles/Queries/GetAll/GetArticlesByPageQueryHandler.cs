@@ -3,34 +3,31 @@ using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
 using CSharpFunctionalExtensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Application.Services.Articles.Queries.GetAll;
 public class GetArticlesByPageQueryHandler 
     : IQueryHandler<GetArticlesByPageQuery, GetArticlesByPageResponse>
 {
-    private readonly IReadDbContext _context;
+    private readonly IArticleReadRepository _repository;
 
-    public GetArticlesByPageQueryHandler(IReadDbContext readDbContext)
+    public GetArticlesByPageQueryHandler(IArticleReadRepository repository)
     {
-        _context = readDbContext;
+        _repository = repository;
     }
 
     public async Task<Result<GetArticlesByPageResponse, Error>> HandleAsync(
         GetArticlesByPageQuery query, 
         CancellationToken token)
     {
-        var articles = _context.Articles
-            .Include(a => a.Author);
+        var entityResult = await _repository.GetAllPublish(new(query.PageIndex, query.PageSize), token);
 
-        var count = articles.Count();
+        var articles = entityResult.Item1
+            .Select(a => a.ToShortViewModel())
+            .ToList();
 
-        var result = await articles
-            .Skip((query.PageIndex - 1) * query.PageSize)
-            .Take(query.PageSize)
-            .Select(u => u.ToShortViewModel())
-            .ToListAsync();
+        var count = entityResult.Item2;
 
-        return new GetArticlesByPageResponse(result, count);
+
+        return new GetArticlesByPageResponse(articles, count);
     }
 }

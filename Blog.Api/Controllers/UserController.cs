@@ -31,7 +31,6 @@ public class UserController : BaseController
     /// <param name="token">CancelationToken</param>
     /// <returns>GetAllUsersByPageResponse</returns>
     [HttpGet]
-    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetAll(
         [FromQuery]
         GetUsersByPageQuery query,
@@ -53,7 +52,7 @@ public class UserController : BaseController
     /// <returns></returns>
     [HttpPost]
     [Route("[action]")]
-    [Authorize]
+    [Authorize(Roles ="ADMIN,USER,MODERATOR")]
     public async Task<IActionResult> PostArticle(
         [FromBody]
         CreateArticleCommand command,

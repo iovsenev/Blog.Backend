@@ -1,7 +1,8 @@
 ﻿using Blog.Application.Interfaces.DbAccess;
+using Blog.Infrastructure.DbConfigurations;
 using Blog.Infrastructure.DbContexts;
-using Blog.Infrastructure.Queries;
-using Blog.Infrastructure.Repositories;
+using Blog.Infrastructure.Repositories.ReadRepositories;
+using Blog.Infrastructure.Repositories.WriteRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,17 +16,18 @@ public static class DependencyInjections
         {
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });
+
         services.AddDbContext<IReadDbContext, ReadDbContext>(opt =>
         {
             opt.UseNpgsql(configuration.GetConnectionString("DatabaseAccess"));
         });
 
         services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<IArticleReadRepository, ArticleReadRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IArticleQueries, ArticleQueries>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddSingleton<SqlConnectionFactory>();
-
+        services.AddScoped<InitialData>();
         return services;
     }
 }

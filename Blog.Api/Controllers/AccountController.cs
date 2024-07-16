@@ -11,6 +11,7 @@ namespace Blog.Api.Controllers;
 public class AccountController : BaseController
 {
     private readonly IMediator _mediator;
+
     /// <summary>
     ///  
     /// </summary>
@@ -19,6 +20,7 @@ public class AccountController : BaseController
     {
         _mediator = mediator;
     }
+
     /// <summary>
     /// Метод входа в систему. Возвращает JWT токен при успешном входе.
     /// </summary>
@@ -35,6 +37,7 @@ public class AccountController : BaseController
             return BadRequest(result.Error);
         return Ok(result.Value);
     }
+
     /// <summary>
     /// Метод регистрации пользователя в системе возвращает JWT токен при успешной регистрации
     /// </summary>

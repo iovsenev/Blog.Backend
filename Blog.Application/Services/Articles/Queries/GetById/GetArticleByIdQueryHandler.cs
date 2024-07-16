@@ -7,17 +7,17 @@ using CSharpFunctionalExtensions;
 namespace Blog.Application.Services.Articles.Queries.GetById;
 public class GetArticleByIdQueryHandler : IQueryHandler<GetArticleByIdQuery, GetArticleByIdResponse>
 {
-    private readonly IArticleQueries _articleQueries;
+    private readonly IArticleReadRepository _repository;
 
-    public GetArticleByIdQueryHandler(IArticleQueries articleQueries)
+    public GetArticleByIdQueryHandler(IArticleReadRepository repository)
     {
-        _articleQueries = articleQueries;
+        _repository = repository;
     }
 
     public async Task<Result<GetArticleByIdResponse, Error>> HandleAsync(GetArticleByIdQuery query, CancellationToken token)
     {
         
-        var articleResult = await _articleQueries.GetByIdAsync(query.Id, token);
+        var articleResult = await _repository.GetByIdAsync(query.Id, token);
 
         if (articleResult.IsFailure)
             return articleResult.Error;
