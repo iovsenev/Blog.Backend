@@ -8,7 +8,6 @@ namespace Blog.Application.Services.Account.Register;
 public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 {
     private readonly IUserRepository _repository;
-
     public RegisterUserHandler(IUserRepository repository)
     {
         _repository = repository;
@@ -20,12 +19,15 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         if (!isUnique)
             return ErrorFactory.General.AlreadyExists($"User with email or user name already exist.");
 
+        var role = await _repository.GetRole(nameof(RoleEntity.User.Name), token);
+
         var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(command.Password);
 
         var entityResult = UserEntity.Create(
             command.Email,
             passwordHash,
-            command.UserName);
+            command.UserName
+            );
 
         if (entityResult.IsFailure)
             return entityResult.Error;

@@ -9,12 +9,10 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEntity>
     {
         builder.ToTable("roles");
 
-        builder.HasKey(x => x.Id);
-        builder.HasIndex(x => x.Name)
-            .IsUnique();
+        builder.HasKey(x => x.Name);
 
         builder.Property(x => x.Name)
-            .IsRequired()
+            //.IsRequired()
             .HasColumnName("name");
     }
 }

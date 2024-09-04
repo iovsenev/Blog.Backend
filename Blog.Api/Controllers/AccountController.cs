@@ -56,4 +56,21 @@ public class AccountController : BaseController
         //Login(new LoginUserCommand())
         return Ok();
     }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> EditUserData() {
+        return Ok();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetUserData() {
+        return Ok();
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        return Ok();
+    }
+
 }

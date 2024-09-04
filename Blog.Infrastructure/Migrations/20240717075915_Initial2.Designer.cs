@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Blog.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blog.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717075915_Initial2")]
+    partial class Initial2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,7 +140,13 @@ namespace Blog.Infrastructure.Migrations
 
             modelBuilder.Entity("Blog.Domain.Entity.Write.RoleEntity", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
@@ -146,8 +155,12 @@ namespace Blog.Infrastructure.Migrations
                         .HasColumnType("text[]")
                         .HasColumnName("permissions");
 
-                    b.HasKey("Name")
+                    b.HasKey("Id")
                         .HasName("pk_roles");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_roles_name");
 
                     b.ToTable("roles", (string)null);
                 });
@@ -214,10 +227,9 @@ namespace Blog.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("register_date");
 
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("role_name");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
 
                     b.Property<string>("SecondName")
                         .IsRequired()
@@ -251,8 +263,8 @@ namespace Blog.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_users_email");
 
-                    b.HasIndex("RoleName")
-                        .HasDatabaseName("ix_users_role_name");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_users_role_id");
 
                     b.HasIndex("UserName")
                         .IsUnique()
@@ -315,10 +327,10 @@ namespace Blog.Infrastructure.Migrations
                 {
                     b.HasOne("Blog.Domain.Entity.Write.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleName")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_users_roles_role_name");
+                        .HasConstraintName("fk_users_role_entity_role_id");
 
                     b.Navigation("Role");
                 });

@@ -17,7 +17,7 @@ public class InitialData
         await _context.Database.EnsureDeletedAsync();
         await _context.Database.MigrateAsync();
         await AddAdmin();
-        await AddUsers();
+        //await AddUsers();
     }
 
     public async Task AddAdmin()

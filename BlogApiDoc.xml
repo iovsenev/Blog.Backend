@@ -42,7 +42,7 @@
             </summary>
             <param name="mediator"></param>
         </member>
-        <member name="M:Blog.Api.Controllers.ArticleController.GetAll(Blog.Application.Services.Articles.Queries.GetAll.GetArticlesByPageQuery,System.Threading.CancellationToken)">
+        <member name="M:Blog.Api.Controllers.ArticleController.GetAllPublished(Blog.Application.Services.Articles.Queries.GetAll.GetArticlesByPageQuery,System.Threading.CancellationToken)">
             <summary>
             Получения списка статей по страницам и общего числа статей.
             </summary>
@@ -69,7 +69,7 @@
             </summary>
             <param name="mediator"></param>
         </member>
-        <member name="M:Blog.Api.Controllers.UserController.GetAll(Blog.Application.Services.Users.Queries.GetByPage.GetUsersByPageQuery,System.Threading.CancellationToken)">
+        <member name="M:Blog.Api.Controllers.UserController.GetAllAuthors(Blog.Application.Services.Users.Queries.GetByPage.GetUsersByPageQuery,System.Threading.CancellationToken)">
             <summary>
             Получение общего списка пользователь имеющих опубликованные статьи. 
             </summary>
@@ -90,7 +90,7 @@
             Получение статьи по Id
             </summary>
             <param name="id">Уникальный идентификатор статьи</param>
-            <param name="canctlationToken"></param>
+            <param name="cancelationToken"></param>
             <returns></returns>
         </member>
         <member name="M:Blog.Api.Controllers.UserController.PostComment(Blog.Application.Services.Users.Commands.CreateComment.CreateCommentCommand,System.Threading.CancellationToken)">

@@ -25,8 +25,8 @@ public class ArticleController : BaseController
     /// <param name="query">Запрос по страницам по умолчанию имеет значения pageIndex = 1 pageSize = 10</param>
     /// <param name="cancellationToken">Cancelation token</param>
     /// <returns>Список ArticleShortViewModel</returns>
-    [HttpGet]
-    public async Task<IActionResult> GetAll(
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllPublished(
         [FromQuery]
         GetArticlesByPageQuery query,
         CancellationToken cancellationToken)
@@ -56,5 +56,11 @@ public class ArticleController : BaseController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> EditArticle()
+    {
+        return Ok();
     }
 }

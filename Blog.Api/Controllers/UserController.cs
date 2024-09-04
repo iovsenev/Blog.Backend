@@ -30,8 +30,8 @@ public class UserController : BaseController
     /// <param name="query">GetUserByPageQuery</param>
     /// <param name="token">CancelationToken</param>
     /// <returns>GetAllUsersByPageResponse</returns>
-    [HttpGet]
-    public async Task<IActionResult> GetAll(
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllAuthors(
         [FromQuery]
         GetUsersByPageQuery query,
         CancellationToken token)
@@ -50,9 +50,7 @@ public class UserController : BaseController
     /// <param name="command"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    [HttpPost]
-    [Route("[action]")]
-    [Authorize(Roles ="ADMIN,USER,MODERATOR")]
+    [HttpPost("[action]")]
     public async Task<IActionResult> PostArticle(
         [FromBody]
         CreateArticleCommand command,
@@ -67,14 +65,14 @@ public class UserController : BaseController
     /// Получение статьи по Id
     /// </summary>
     /// <param name="id">Уникальный идентификатор статьи</param>
-    /// <param name="canctlationToken"></param>
+    /// <param name="cancelationToken"></param>
     /// <returns></returns>
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken canctlationToken)
+    [HttpGet("[action]/{id}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancelationToken)
     {
         var query = new GetByIdQuery(id);
 
-        var result = await _mediator.Send<GetByIdResponse>(query, canctlationToken);
+        var result = await _mediator.Send<GetByIdResponse>(query, cancelationToken);
 
         if (result.IsFailure)
             return BadRequest(result.Error);
@@ -87,8 +85,7 @@ public class UserController : BaseController
     /// <param name="command"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    [HttpPost]
-    [Route("[action]")]
+    [HttpPost("[action]")]
     [Authorize]
     public async Task<IActionResult> PostComment(
         [FromBody]
@@ -101,6 +98,18 @@ public class UserController : BaseController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteArticle()
+    {
+        return Ok();
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteComment()
+    {
+        return Ok();
     }
 }
 

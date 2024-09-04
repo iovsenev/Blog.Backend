@@ -11,6 +11,7 @@ public class WriteDbContext : DbContext
     public DbSet<ArticleEntity> Articles => Set<ArticleEntity>();
     public DbSet<CommentEntity> Comments => Set<CommentEntity>();
     public DbSet<TagEntity> Tags => Set<TagEntity>();
+    public DbSet<RoleEntity> Roles => Set<RoleEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

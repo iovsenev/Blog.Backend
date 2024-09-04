@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
-[Authorize(Roles ="ADMIN,MODERATOR")]
+[Authorize(Roles = "ADMIN,MODERATOR")]
 public class AdminController : BaseController
 {
     private readonly IMediator _mediator;
@@ -15,8 +15,26 @@ public class AdminController : BaseController
         _mediator = mediator;
     }
 
-    [HttpPost("publishArticle")]
-    public async Task<IActionResult> PublishArticle([FromBody] PostArticleAdminCommand command, CancellationToken cancellationToken)
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetUnPostedArticles(CancellationToken cancellationToken)
+    {
+        return Ok();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetRoles(CancellationToken cancellationToken)
+    {
+        return Ok();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+    {
+        return Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> ChangeArticleStatus([FromBody] PostArticleAdminCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command);
 
@@ -25,8 +43,20 @@ public class AdminController : BaseController
         return Ok(result.Value);
     }
 
-    [HttpGet("UnPostedArticle")]
-    public async Task<IActionResult> GetUnPostedArticles(CancellationToken cancellationToken)
+    [HttpPost("[action]")]
+    public async Task<IActionResult> CreateRole()
+    {
+        return Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> ChangeUserStatus()
+    {
+        return Ok();
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteRole()
     {
         return Ok();
     }

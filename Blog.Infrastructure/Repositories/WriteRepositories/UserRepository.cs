@@ -1,7 +1,6 @@
 ﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
-using Blog.Domain.ValueObject;
 using Blog.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +76,14 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id, token);
 
         if (entity is null)
-            return ErrorFactory.General.NotFound($"Entity whith this id: {id} is not found.");
+            return ErrorFactory.General.NotFound($"Entity with this id: {id} is not found.");
+
+        return entity;
+    }
+
+    public async Task<Result<RoleEntity, Error>> GetRole(string roleName, CancellationToken token)
+    {
+        var entity = await _dbContext.Roles.FirstOrDefaultAsync(r=> r.Name.ToLower() == roleName.ToLower(), token);
 
         return entity;
     }
