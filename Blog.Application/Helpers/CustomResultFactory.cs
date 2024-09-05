@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Blog.Domain.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Results;
 
@@ -12,9 +13,21 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
         if (validationProblemDetails is null)
             return new BadRequestObjectResult("Wrong something");
 
-        var errors = validationProblemDetails.Errors/*.ToDictionary()*/;
+        var validationErrors = validationProblemDetails.Errors.ToDictionary();
+        var message = "";
+        foreach (var error in validationErrors)
+        {
+            var key = error.Key;
+            var value = error.Value;
+            message += key + ":[";
+            foreach (var item in value)
+            {
+                message += item + " ";
+            }
+            message += "]\n";
+        }
 
-        var envelope = ResponseFormat.Error(errors);
+        var envelope = ResponseFormat.Error(ErrorFactory.General.InValid(validationErrors));
 
         return new BadRequestObjectResult(envelope);
     }

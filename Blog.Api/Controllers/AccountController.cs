@@ -2,6 +2,7 @@
 using Blog.Application.Mediators;
 using Blog.Application.Services.Account.Login;
 using Blog.Application.Services.Account.Register;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
@@ -33,7 +34,7 @@ public class AccountController : BaseController
         CancellationToken cancelationToken)
     {
         var result = await _mediator.Send(command, cancelationToken);
-        if (result.IsFailure) 
+        if (result.IsFailure)
             return BadRequest(result.Error);
         return Ok(result.Value);
     }
@@ -53,18 +54,22 @@ public class AccountController : BaseController
 
         if (result.IsFailure)
             return BadRequest(result.Error);
-        //Login(new LoginUserCommand())
+        return await Login(new LoginUserCommand(command.Email, command.Password), cancelationToken);
         return Ok();
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> EditUserData() {
+    [Authorize]
+    public async Task<IActionResult> EditUserData()
+    {
         return Ok();
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetUserData() {
-        return Ok();
+    public async Task<IActionResult> GetUserData()
+    {
+        var user = User;
+        return Ok(user.Claims.Select(c => c.Value));
     }
 
     [HttpDelete("[action]")]

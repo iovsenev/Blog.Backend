@@ -5,19 +5,18 @@ using CSharpFunctionalExtensions;
 namespace Blog.Domain.Entity.Write;
 public class UserEntity : BaseEntity
 {
-    private UserEntity() { }    
+    //private UserEntity() { }    
     private UserEntity(
         string email,
         string passwordHash,
         string userName,
-        DateTimeOffset registerDate,
-        RoleEntity role)
+        DateTimeOffset registerDate
+        )
     {
         Email = email;
         PasswordHash = passwordHash;
         RegisterDate = registerDate;
         UserName = userName;
-        Role = role;
     }
     public string Email { get; private set; }
     public string PasswordHash { get; private set; }
@@ -32,7 +31,7 @@ public class UserEntity : BaseEntity
 
     public AddressValue Address { get; private set; } = AddressValue.CreateEmpty();
 
-    public RoleEntity Role { get; private set; }
+    public RoleEntity Role { get; private set; } = RoleEntity.User;
 
 
 
@@ -62,14 +61,17 @@ public class UserEntity : BaseEntity
         if (emailResult.IsFailure)
             return emailResult.Error;
 
-        if (string.IsNullOrEmpty(userName.Trim()))
+        if (string.IsNullOrEmpty(userName))
             userName = emailResult.Value.Split('@')[0];
        userName = "@" + userName;
 
         if (role is null)
             role = RoleEntity.User;
 
-        return new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow, role);
+        var user = new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow);
+        user.Role = role;
+
+        return user;
     }
 
     public void PostArticle(ArticleEntity article)

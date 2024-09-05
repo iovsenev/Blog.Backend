@@ -84,6 +84,8 @@ public class UserRepository : IUserRepository
     public async Task<Result<RoleEntity, Error>> GetRole(string roleName, CancellationToken token)
     {
         var entity = await _dbContext.Roles.FirstOrDefaultAsync(r=> r.Name.ToLower() == roleName.ToLower(), token);
+        if (entity is null)
+            return ErrorFactory.General.NotFound($" Role with name : {roleName} not found");
 
         return entity;
     }

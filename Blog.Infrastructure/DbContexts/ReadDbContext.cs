@@ -17,7 +17,7 @@ public class ReadDbContext : DbContext, IReadDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly,
-            type => type.FullName.Contains(".Read"));
+            type => type.FullName == null ? false : type.FullName.Contains(".Read"));
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,12 +1,14 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Blog.Domain.Common;
 public class Error
 {
-    public string ErrorCode { get; }
-    public string Message { get; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public ErrorCodes ErrorCode { get; }
+    public object Message { get; }
 
-    public Error(string code, string message)
+    public Error(ErrorCodes code, object message)
     {
         ErrorCode = code;
         Message = message;

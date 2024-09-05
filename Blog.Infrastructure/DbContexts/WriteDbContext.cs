@@ -16,7 +16,7 @@ public class WriteDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly, 
-            type => type.FullName.Contains(".Write"));
+            type => type.FullName == null ? false : type.FullName.Contains(".Write"));
 
         base.OnModelCreating(modelBuilder);
     }
