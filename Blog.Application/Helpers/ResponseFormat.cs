@@ -1,12 +1,15 @@
-﻿namespace Blog.Application.Helpers;
+﻿using Blog.Domain.Common;
+using System.Text.Json.Serialization;
+
+namespace Blog.Application.Helpers;
 public class ResponseFormat
 {
     public object? Result { get; }
-    public object? Errors { get; }
+    public Error? Errors { get; }
     public DateTime TimeGenerated { get; }
 
     private ResponseFormat(object? result,
-            object? errors)
+            Error? errors)
     {
         Result = result;
         Errors = errors;
@@ -18,7 +21,7 @@ public class ResponseFormat
         return new(result, null);
     }
 
-    public static ResponseFormat Error(object? errors)
+    public static ResponseFormat Error(Error? errors)
     {
         return new(null, errors);
     }

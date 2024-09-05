@@ -10,7 +10,7 @@ public class TagEntity : BaseEntity
         TagName = tagName;
     }
 
-    public string TagName { get; private set; }
+    public string TagName { get; private set; } = string.Empty; 
 
     private IReadOnlyList<ArticleEntity> _articles = [];
     public List<ArticleEntity> Articles => _articles.ToList();

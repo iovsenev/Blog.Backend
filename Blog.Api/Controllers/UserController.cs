@@ -70,6 +70,7 @@ public class UserController : BaseController
     [HttpGet("[action]/{id}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancelationToken)
     {
+
         var query = new GetByIdQuery(id);
 
         var result = await _mediator.Send<GetByIdResponse>(query, cancelationToken);
@@ -92,6 +93,10 @@ public class UserController : BaseController
         CreateCommentCommand command,
         CancellationToken token)
     {
+        var userId = User.Identity;
+        if (userId == null)
+            return BadRequest("userId = null");
+        return Ok(userId);
         var result = await _mediator.Send(command, token);
 
         if (result.IsFailure)
