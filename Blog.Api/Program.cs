@@ -13,8 +13,6 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var key = builder.Configuration.GetValue<string>($"{JwtOptions.Jwt}:{nameof(JwtOptions.SecretKey)}");
-if (key == null)
-    throw new ArgumentNullException(nameof(key));
 var configuration = builder.Configuration;
 
 builder.Services.AddInfrastructure(configuration);

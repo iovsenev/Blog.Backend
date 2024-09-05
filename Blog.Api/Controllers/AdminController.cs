@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
-[Authorize(Roles = "ADMIN")]
+[Authorize(Roles = "ADMIN,MODERATOR")]
 public class AdminController : BaseController
 {
     private readonly IMediator _mediator;

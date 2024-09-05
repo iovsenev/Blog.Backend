@@ -2,6 +2,7 @@
 
 public record ArticleFullViewModel
 {
+    private ArticleFullViewModel() { }
     public ArticleFullViewModel(
         Guid id,
         string title,

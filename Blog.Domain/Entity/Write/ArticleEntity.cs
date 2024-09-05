@@ -4,25 +4,15 @@ using CSharpFunctionalExtensions;
 namespace Blog.Domain.Entity.Write;
 public class ArticleEntity : BaseEntity
 {
-    //private ArticleEntity() { }
+    private ArticleEntity() { }
 
-    private ArticleEntity(
-        string title,
-        string description,
-        string content,
-        DateTimeOffset createdDate,
-        double rating = 0,
-        bool isPublished = false,
-        bool underInspection = true
-        )
+    private ArticleEntity(string title, string description, string text, DateTimeOffset createdDate, IEnumerable<TagEntity> tags)
     {
         Title = title;
         Description = description;
-        Content = content;
+        Content = text;
         CreatedDate = createdDate;
-        Rating = rating;
-        IsPublished = isPublished;
-        UnderInspection = underInspection;
+        _tags.AddRange(tags);
     }
 
     public string Title { get; private set; }
@@ -30,11 +20,11 @@ public class ArticleEntity : BaseEntity
     public string Content { get; private set; } 
     public DateTimeOffset CreatedDate { get; private set; }
 
-    public double Rating { get; private set; }
-    public bool IsPublished { get; private set; } 
-    public bool UnderInspection { get; private set; } 
+    public double Rating { get; private set; } = 0;
+    public bool IsPublished { get; private set; } = false;
+    public bool UnderInspection { get; private set; } = true;
 
-    public UserEntity? Author { get; private set; }
+    public UserEntity Author { get; private set; }
 
     private List<CommentEntity> _comments = [];
     public ICollection<CommentEntity> Comments => _comments.ToList();
@@ -55,11 +45,7 @@ public class ArticleEntity : BaseEntity
         if (string.IsNullOrWhiteSpace(text))
             return ErrorFactory.General.InValid("The text is not valid value");
         
-        var article =  new ArticleEntity( title, description, text, DateTimeOffset.UtcNow);
-
-        article._comments = [];
-        article._tags.AddRange(tags);
-        return article;
+        return new ArticleEntity(title, description, text, DateTimeOffset.UtcNow, tags);
     }
 
     public void PostComment(CommentEntity comment)

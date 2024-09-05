@@ -49,7 +49,7 @@ namespace Blog.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("AuthorId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
@@ -106,11 +106,11 @@ namespace Blog.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("ArticleId")
+                    b.Property<Guid>("ArticleId")
                         .HasColumnType("uuid")
                         .HasColumnName("article_id");
 
-                    b.Property<Guid?>("AuthorId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
@@ -140,10 +140,6 @@ namespace Blog.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("name");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
 
                     b.Property<string[]>("Permissions")
                         .IsRequired()
@@ -288,6 +284,7 @@ namespace Blog.Infrastructure.Migrations
                         .WithMany("Articles")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
                         .HasConstraintName("fk_articles_users_author_id");
 
                     b.Navigation("Author");
@@ -299,12 +296,14 @@ namespace Blog.Infrastructure.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_comments_articles_article_id");
 
                     b.HasOne("Blog.Domain.Entity.Write.UserEntity", "Author")
                         .WithMany("Comments")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
                         .HasConstraintName("fk_comments_users_author_id");
 
                     b.Navigation("Article");

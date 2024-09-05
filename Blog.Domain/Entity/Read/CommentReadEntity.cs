@@ -7,6 +7,6 @@ public class CommentReadEntity
     public string Content { get; set; } = string.Empty;
     public DateTimeOffset CreateDate { get; set; }
 
-    public UserReadModel Author { get; set; } = new();
-    public ArticleReadModel Article { get; set; } = new();
+    public UserReadModel Author { get; set; }
+    public ArticleReadModel Article { get; set; }
 }

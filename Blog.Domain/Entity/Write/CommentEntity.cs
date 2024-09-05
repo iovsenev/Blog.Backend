@@ -4,30 +4,27 @@ using CSharpFunctionalExtensions;
 namespace Blog.Domain.Entity.Write;
 public class CommentEntity : BaseEntity
 {
-    //private CommentEntity() { }
+    private CommentEntity() { }
     private CommentEntity(
-        string content,
-        DateTimeOffset createDate)
+        string text,
+        DateTimeOffset createdDate)
     {
-        Content = content;
-        CreateDate = createDate;
+        Content = text;
+        CreateDate = createdDate;
     }
 
     public string Content { get; private set; }
     public DateTimeOffset CreateDate { get; private set; }
 
-    public UserEntity? Author { get; private set; }
-    public ArticleEntity? Article { get; private set; }
+    public UserEntity Author { get; private set; }
+    public ArticleEntity Article { get; private set; }
 
-    public static Result<CommentEntity, Error> Create(UserEntity author, ArticleEntity article, string inputText)
+    public static Result<CommentEntity, Error> Create(string inputText)
     {
         inputText = inputText.Trim();
 
-        if (string.IsNullOrEmpty(inputText))
-            return ErrorFactory.General.InValid($"Comment must be not empty");
-        var comment = new CommentEntity(inputText, DateTimeOffset.UtcNow);
-        comment.Author = author;
-        comment.Article = article;  
-        return comment;
+        return string.IsNullOrEmpty(inputText)
+             ? ErrorFactory.General.InValid($"Input comment must be not empty or null")
+             : new CommentEntity(inputText, DateTimeOffset.UtcNow);
     }
 }

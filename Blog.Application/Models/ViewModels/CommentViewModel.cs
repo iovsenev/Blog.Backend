@@ -2,6 +2,7 @@
 
 public record CommentViewModel
 {
+    private CommentViewModel() { }
     public CommentViewModel(
         Guid id, 
         string text, 

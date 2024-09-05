@@ -59,7 +59,7 @@ public class RoleEntity : BaseEntity
         Permissions = permissions;
     }   
 
-    public string Name { get; private set; } = string.Empty;
+    public string Name { get; private set; }
 
     public string[] Permissions { get; private set; } = [];
 }

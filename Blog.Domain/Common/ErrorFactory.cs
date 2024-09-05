@@ -5,7 +5,7 @@ public static class ErrorFactory
     {
         public static Error InternalServer(string message)
         {
-            return new Error(ErrorCodes.InternalServer, message);
+            return new Error("internal.server", message);
         }
 
         public static Error NotFound(string? message = null)
@@ -13,15 +13,15 @@ public static class ErrorFactory
             message = message == null
                 ? "Entity not found."
                 : message;
-            return new Error(ErrorCodes.NotFound, message);
+            return new Error("not.found", message);
         }
 
-        public static Error InValid(object? message = null)
+        public static Error InValid(string? message = null)
         {
             message = message == null
                 ? "Input data is not valid."
                 : message;
-            return new Error(ErrorCodes.NotValid, message);
+            return new Error("invalid", $"{message}");
         }
 
         public static Error AlreadyExists(string? message = null)
@@ -29,7 +29,7 @@ public static class ErrorFactory
             message = message == null
                 ? "Object already exist."
                 : $": {message}";
-            return new Error(ErrorCodes.AlreadyExists, $"{message}");
+            return new Error("already.exist", $"{message}");
         }
 
         public static Error AddingFalling(string? message = null)
@@ -37,7 +37,7 @@ public static class ErrorFactory
             message = message == null
                 ? "The entity was not added."
                 : $": {message}";
-            return new Error(ErrorCodes.AddingFailed, $"{message}");
+            return new Error("adding.falling", $"{message}");
         }
 
         public static Error SaveFalling(string? message = null)
@@ -45,7 +45,7 @@ public static class ErrorFactory
             message = message == null
                 ? "The entity was not saved."
                 : $": {message}";
-            return new Error(ErrorCodes.SaveFalling, $"{message}");
+            return new Error("save.falling", $"{message}");
         }
     }
 }

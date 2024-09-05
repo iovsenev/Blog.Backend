@@ -20,7 +20,7 @@ public static class UserExtensions
             return "";
         var fullname = new StringBuilder(user.FirstName);
 
-        if (string.IsNullOrEmpty($"{user.FirstName[0].ToString().ToUpper()}{user.FirstName.Skip(1)?.ToString()?.ToLower()}"))
+        if (string.IsNullOrEmpty($"{user.FirstName[0].ToString().ToUpper()}{user.FirstName.Skip(1).ToString().ToLower()}"))
             return fullname.ToString();
         fullname.Append($" {user.LastName[0].ToString().ToUpper()}.");
 

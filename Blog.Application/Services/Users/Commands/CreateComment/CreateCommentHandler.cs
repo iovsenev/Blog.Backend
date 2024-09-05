@@ -28,7 +28,7 @@ public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
         if (article.IsFailure)
             return article.Error;
 
-        var comment = CommentEntity.Create(author.Value, article.Value, command.Text);
+        var comment = CommentEntity.Create(command.Text);
         if (comment.IsFailure)
             return comment.Error;
 

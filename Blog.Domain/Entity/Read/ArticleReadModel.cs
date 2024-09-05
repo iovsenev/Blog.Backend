@@ -13,7 +13,7 @@ public class ArticleReadModel
     public bool IsPublished { get; set; } = false;
     public bool UnderInspection { get; set; } = true;
 
-    public UserReadModel Author { get; set; } = new();
+    public UserReadModel Author { get; set; }
 
     public ICollection<CommentReadEntity> Comments { get; set; } = [];
 
