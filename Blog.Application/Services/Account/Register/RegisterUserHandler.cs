@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Account.Register;
 public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
@@ -13,11 +12,11 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         _repository = repository;
     }
 
-    public async Task<Result<string, Error>> HandleAsync(RegisterUserCommand command, CancellationToken token)
+    public async Task<Result<string>> HandleAsync(RegisterUserCommand command, CancellationToken token)
     {
         var isUnique = await _repository.IsUniqueUser(command.UserName, command.Email, token);
-        if (!isUnique)
-            return ErrorFactory.General.AlreadyExists($"User with email or user name already exist.");
+        if (!isUnique.IsSuccess)
+            return Error.AlreadyExists($"User with email or user name already exist.");
 
         var role = await _repository.GetRole(nameof(RoleEntity.User.Name), token);
 
@@ -29,7 +28,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
             command.UserName
             );
 
-        if (entityResult.IsFailure)
+        if (entityResult.IsFailure || entityResult.Value is  null)
             return entityResult.Error;
 
         var result = await _repository.AddAsync(entityResult.Value, token);

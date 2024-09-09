@@ -1,6 +1,5 @@
 ﻿using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Admin.GetNotPublishArticles;
 public class GetNotPublishArticlesHandler// : IQueryHandler<GetNotPublishArticlesRequest, GetNotPublishArticlesResponse>

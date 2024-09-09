@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Application.Services.Users.Queries.GetByPage;
@@ -15,7 +14,7 @@ public class GetUsersByPageQueryHandler : IQueryHandler<GetUsersByPageQuery, Get
         _context = context;
     }
 
-    public async Task<Result<GetAllUsersByPageResponse, Error>> HandleAsync(GetUsersByPageQuery query, CancellationToken token)
+    public async Task<Result<GetAllUsersByPageResponse>> HandleAsync(GetUsersByPageQuery query, CancellationToken token)
     {
         var users = _context.Users
             .Include(u => u.Articles)

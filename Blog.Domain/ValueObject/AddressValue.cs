@@ -1,5 +1,4 @@
 ﻿using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.ValueObject;
 public class AddressValue : BaseValueObject
@@ -14,7 +13,7 @@ public class AddressValue : BaseValueObject
 
     public string City { get; private set; }
 
-    public static Result<AddressValue, Error> Create(string country, string city)
+    public static Result<AddressValue> Create(string country, string city)
     {
         return new AddressValue(country, city);
     }

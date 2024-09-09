@@ -3,7 +3,6 @@ using Blog.Application.Models;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Read;
 using Blog.Infrastructure.DbContexts;
-using CSharpFunctionalExtensions;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +46,7 @@ public class ArticleReadRepository : IArticleReadRepository
         return articles;
     }
 
-    public async Task<Result<ArticleReadModel, Error>> GetByIdAsync(Guid id, CancellationToken cancelationToken)
+    public async Task<Result<ArticleReadModel>> GetByIdAsync(Guid id, CancellationToken cancelationToken)
     {
         using var connection = _connectionFactory.CreateConnection();
 
@@ -112,7 +111,7 @@ public class ArticleReadRepository : IArticleReadRepository
             splitOn: "id,id,id,id");
 
         return !dictionaryArticle.ContainsKey(id)
-            ? ErrorFactory.General.NotFound($"The article with id: {id} not found")
+            ? Error.NotFound($"The article with id: {id} not found")
             : dictionaryArticle[id];
     }
 }

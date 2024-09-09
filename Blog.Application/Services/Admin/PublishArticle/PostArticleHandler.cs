@@ -1,7 +1,6 @@
 ﻿using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Admin.PublishArticle;
 public class PostArticleHandler : ICommandHandler<PostArticleAdminCommand>
@@ -13,10 +12,10 @@ public class PostArticleHandler : ICommandHandler<PostArticleAdminCommand>
         _repository = repository;
     }
 
-    public async Task<Result<string, Error>> HandleAsync(PostArticleAdminCommand command, CancellationToken cancellationToken)
+    public async Task<Result<string>> HandleAsync(PostArticleAdminCommand command, CancellationToken cancellationToken)
     {
         var entityResult = await _repository.GetByIdAsync(command.ArticleId, cancellationToken);
-        if (entityResult.IsFailure)
+        if (entityResult.IsFailure || entityResult.Value is null)
             return entityResult.Error;
 
         var article = entityResult.Value;

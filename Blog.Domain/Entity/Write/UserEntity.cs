@@ -1,6 +1,5 @@
 ﻿using Blog.Domain.Common;
 using Blog.Domain.ValueObject;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.Entity.Write;
 public class UserEntity : BaseEntity
@@ -42,33 +41,33 @@ public class UserEntity : BaseEntity
     private List<CommentEntity> _comments = [];
     public ICollection<CommentEntity> Comments => _comments.ToList();
 
-    public static Result<UserEntity, Error> Create(
+    public static Result<UserEntity> Create(
         string emailInput,
         string passwordHash,
-        string? userName,
-        RoleEntity role = null!)
+        string userName = "",
+        RoleEntity? role = null)
     {
         if (string.IsNullOrEmpty(passwordHash.Trim()))
-            return ErrorFactory.General.NotValid("This password is null or empty");
+            return Error.NotValid("This password is null or empty");
 
         emailInput = emailInput.Trim();
 
         if (string.IsNullOrEmpty(emailInput))
-            return ErrorFactory.General.NotValid("This email is null or empty");
+            return Error.NotValid("This email is null or empty");
 
         var emailResult  = VerifyProperty.VerifyEmail(emailInput);
 
         if (emailResult.IsFailure)
             return emailResult.Error;
-
+        
         if (string.IsNullOrEmpty(userName))
-            userName = emailResult.Value.Split('@')[0];
+            userName = emailInput.Split('@')[0];
        userName = "@" + userName;
 
         if (role is null)
             role = RoleEntity.User;
 
-        var user = new UserEntity(emailResult.Value, passwordHash, userName, DateTimeOffset.UtcNow);
+        var user = new UserEntity(emailInput, passwordHash, userName, DateTimeOffset.UtcNow);
         user.Role = role;
 
         return user;

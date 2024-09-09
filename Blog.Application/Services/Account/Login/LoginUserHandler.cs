@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Account.Login;
 public class LoginUserHandler : ICommandHandler<LoginUserCommand>
@@ -16,7 +15,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand>
         _tokenHandler = tokenHandler;
     }
 
-    public async Task<Result<string, Error>> HandleAsync(LoginUserCommand command, CancellationToken cancelationToken)
+    public async Task<Result<string>> HandleAsync(LoginUserCommand command, CancellationToken cancelationToken)
     {
         var userResult = await _repository.GetByEmailAsync(command.Email, cancelationToken);
 
@@ -26,7 +25,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand>
         var user = userResult.Value;
 
         if (!BCrypt.Net.BCrypt.EnhancedVerify(command.Password, user.PasswordHash))
-            return ErrorFactory.General.NotValid("Password is not valid");
+            return Error.NotValid("Password is not valid");
 
         var token = _tokenHandler.CreateToken(user);
 

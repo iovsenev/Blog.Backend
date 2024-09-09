@@ -1,6 +1,5 @@
 ﻿using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 using System.Collections.Concurrent;
 using System.Threading;
 
@@ -15,7 +14,7 @@ public class Mediator : IMediator
         _provider = provider;
     }
 
-    public async Task<Result<TResponse, Error>> Send<TResponse>(IQuery request, CancellationToken token = default)
+    public async Task<Result<TResponse>> Send<TResponse>(IQuery request, CancellationToken token = default)
     {
         if (request == null)
         {
@@ -32,7 +31,7 @@ public class Mediator : IMediator
         return await handler.HandleAsync(request, _provider, token);
     }
 
-    public async Task<Result<string, Error>> Send(ICommand command, CancellationToken token = default)
+    public async Task<Result<string>> Send(ICommand command, CancellationToken token = default)
     {
         if (command == null)
         {

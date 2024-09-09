@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.DbAccess;
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Articles.Queries.GetAll;
 public class GetArticlesByPageQueryHandler 
@@ -15,7 +14,7 @@ public class GetArticlesByPageQueryHandler
         _repository = repository;
     }
 
-    public async Task<Result<GetArticlesByPageResponse, Error>> HandleAsync(
+    public async Task<Result<GetArticlesByPageResponse>> HandleAsync(
         GetArticlesByPageQuery query, 
         CancellationToken token)
     {

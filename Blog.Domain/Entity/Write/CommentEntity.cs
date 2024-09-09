@@ -1,5 +1,4 @@
 ﻿using Blog.Domain.Common;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Domain.Entity.Write;
 public class CommentEntity : BaseEntity
@@ -19,12 +18,12 @@ public class CommentEntity : BaseEntity
     public UserEntity? Author { get; private set; }
     public ArticleEntity? Article { get; private set; }
 
-    public static Result<CommentEntity, Error> Create(UserEntity author, ArticleEntity article, string inputText)
+    public static Result<CommentEntity> Create(UserEntity author, ArticleEntity article, string inputText)
     {
         inputText = inputText.Trim();
 
         if (string.IsNullOrEmpty(inputText))
-            return ErrorFactory.General.NotValid($"Comment must be not empty");
+            return Error.NotValid($"Comment must be not empty");
         var comment = new CommentEntity(inputText, DateTimeOffset.UtcNow);
         comment.Author = author;
         comment.Article = article;  

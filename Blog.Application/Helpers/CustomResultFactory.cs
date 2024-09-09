@@ -27,7 +27,7 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
             message += "]\n";
         }
 
-        var envelope = ResponseFormat.Error(ErrorFactory.General.NotValid(validationErrors));
+        var envelope = ResponseFormat.Error(Error.NotValid(validationErrors));
 
         return new BadRequestObjectResult(envelope);
     }

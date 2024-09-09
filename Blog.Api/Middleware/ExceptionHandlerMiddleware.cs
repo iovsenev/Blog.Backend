@@ -26,7 +26,7 @@ public class ExceptionHandlerMiddleware
         {
             _logger.LogError(ex.Message);
 
-            var error = ErrorFactory.General.InternalServer(ex.Message);
+            var error = Error.InternalServer(ex.Message);
 
             var envelope = ResponseFormat.Error(error);
 

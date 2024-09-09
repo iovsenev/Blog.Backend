@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Users.Commands.CreateComment;
 public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
@@ -18,7 +17,7 @@ public class CreateCommentHandler : ICommandHandler<CreateCommentCommand>
         _articleRepository = articleRepository;
     }
 
-    public async Task<Result<string, Error>> HandleAsync(CreateCommentCommand command, CancellationToken token)
+    public async Task<Result<string>> HandleAsync(CreateCommentCommand command, CancellationToken token)
     {
         var author = await _userRepository.GetByIdAsync(command.AuthorId, token);
         if (author.IsFailure)

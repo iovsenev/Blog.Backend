@@ -2,7 +2,6 @@
 using Blog.Application.Interfaces.Services;
 using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
-using CSharpFunctionalExtensions;
 
 namespace Blog.Application.Services.Users.Commands.CreateArticle;
 public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
@@ -16,10 +15,10 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         _tagRepository = tagRepository;
     }
 
-    public async Task<Result<string, Error>> HandleAsync(CreateArticleCommand command, CancellationToken token)
+    public async Task<Result<string>> HandleAsync(CreateArticleCommand command, CancellationToken token)
     {
         var author = await _repository.GetByIdAsync(command.AuthorId, token);
-        if (author.IsFailure)
+        if (author.IsFailure || author.Value is null)
             return author.Error;
 
         var tags = await GetTags(command.Tags, token);
@@ -41,13 +40,13 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         return article.Value.Id.ToString();
     }
 
-    private async Task<Result<IEnumerable<TagEntity>, Error>> GetTags(ICollection<string> tags, CancellationToken token)
+    private async Task<Result<IEnumerable<TagEntity>>> GetTags(ICollection<string> tags, CancellationToken token)
     {
         List<TagEntity> entities = new List<TagEntity>();
         foreach (var tag in tags)
         {
             if (string.IsNullOrEmpty(tag))
-                return ErrorFactory.General.NotValid("This tag is null or empty.");
+                return Error.NotValid("This tag is null or empty.");
             var tagEntityResult = await _tagRepository.GetByTagNameAsync(tag, token);
 
             TagEntity tagEntity;
@@ -55,7 +54,7 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
             if (tagEntityResult.IsFailure)
             {
                 var tagResult = TagEntity.Create(tag);
-                if (tagResult.IsFailure)
+                if (tagResult.IsFailure || tagResult.Value is null)
                     return tagResult.Error;
                 tagEntity = tagResult.Value;
             }

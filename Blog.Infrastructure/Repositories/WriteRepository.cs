@@ -1,6 +1,5 @@
 ﻿using Blog.Domain.Common;
 using Blog.Infrastructure.DbContexts;
-using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
@@ -15,11 +14,11 @@ public abstract class WriteRepository<TEntity> : Repository<WriteDbContext>, IWr
         _entities = _DbContext.Set<TEntity>();
     }
 
-    public virtual async Task<Result<TEntity, Error>> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
+    public virtual async Task<Result<TEntity>> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         var entity = await _entities.FirstOrDefaultAsync(predicate, cancellationToken);
         if (entity is null)
-            return ErrorFactory.General.NotFound("Entity not found");
+            return Error.NotFound("Entity not found");
         return entity;
     }
 
