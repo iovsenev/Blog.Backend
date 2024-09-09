@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entity.Write;
+﻿using Blog.Domain.Common;
+using Blog.Domain.Entity.Write;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,10 @@ public class UserEntityTest
 
         result.IsSuccess.Should().Be(true); 
         result.IsFailure.Should().Be(false);
-        result.Error.Should().BeNull();
-        //result.Value.Should().NotBeNull();
-        //result.Value.UserName.Should().Be(userName);
-        //result.Value.Role.Should().Be(userRole);
+        result.Error.Should().Be(Error.None);
+        result.Value.Should().NotBeNull();
+        result.Value.UserName.Should().Be("@"+userName);
+        result.Value.Role.Should().Be(userRole);
     }
 
 }
