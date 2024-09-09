@@ -49,12 +49,12 @@ public class UserEntity : BaseEntity
         RoleEntity role = null!)
     {
         if (string.IsNullOrEmpty(passwordHash.Trim()))
-            return ErrorFactory.General.InValid("This password is null or empty");
+            return ErrorFactory.General.NotValid("This password is null or empty");
 
         emailInput = emailInput.Trim();
 
         if (string.IsNullOrEmpty(emailInput))
-            return ErrorFactory.General.InValid("This email is null or empty");
+            return ErrorFactory.General.NotValid("This email is null or empty");
 
         var emailResult  = VerifyProperty.VerifyEmail(emailInput);
 

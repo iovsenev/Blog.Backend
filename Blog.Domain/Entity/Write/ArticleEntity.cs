@@ -49,11 +49,11 @@ public class ArticleEntity : BaseEntity
         text = text.Trim();
 
         if (string.IsNullOrWhiteSpace(title))
-            return ErrorFactory.General.InValid("The title is not valid value");
+            return ErrorFactory.General.NotValid("The title is not valid value");
         if (string.IsNullOrWhiteSpace(description))
-            return ErrorFactory.General.InValid("The description is not valid value");
+            return ErrorFactory.General.NotValid("The description is not valid value");
         if (string.IsNullOrWhiteSpace(text))
-            return ErrorFactory.General.InValid("The text is not valid value");
+            return ErrorFactory.General.NotValid("The text is not valid value");
         
         var article =  new ArticleEntity( title, description, text, DateTimeOffset.UtcNow);
 

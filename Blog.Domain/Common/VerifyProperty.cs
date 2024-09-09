@@ -13,7 +13,7 @@ internal static class VerifyProperty
         emailInput = emailInput.Trim().ToLower();
 
         if (string.IsNullOrEmpty(emailInput) && !Regex.IsMatch(emailInput, EmailRegex))
-            ErrorFactory.General.InValid("This email is not valid.");
+            ErrorFactory.General.NotValid("This email is not valid.");
 
         return emailInput;
 
@@ -24,7 +24,7 @@ internal static class VerifyProperty
         phoneInput = phoneInput.Trim().ToLower();
 
         if (string.IsNullOrEmpty(phoneInput) && !Regex.IsMatch(phoneInput, PhoneRegex))
-            return ErrorFactory.General.InValid("this email is not valid.");
+            return ErrorFactory.General.NotValid("this email is not valid.");
 
         return phoneInput;
     }

@@ -20,7 +20,7 @@ public class TagEntity : BaseEntity
         inputTag = inputTag.Trim();
 
         return string.IsNullOrEmpty(inputTag) 
-            ? ErrorFactory.General.InValid("Tag input must be not null or not empty")
+            ? ErrorFactory.General.NotValid("Tag input must be not null or not empty")
             : new TagEntity(inputTag);
     }
 }

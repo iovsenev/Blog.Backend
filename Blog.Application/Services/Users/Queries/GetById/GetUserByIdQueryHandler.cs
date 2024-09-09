@@ -18,7 +18,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetByIdQuery, GetByIdRespon
     public async Task<Result<GetByIdResponse, Error>> HandleAsync(GetByIdQuery query, CancellationToken token)
     {
         if (query.Id.Equals(Guid.Empty))
-            return ErrorFactory.General.InValid($"This id: {query.Id} is not valid");
+            return ErrorFactory.General.NotValid($"This id: {query.Id} is not valid");
 
         var entity = await _context.Users
             .Include(u => u.Articles)

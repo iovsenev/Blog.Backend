@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
     var initData = scope.ServiceProvider.GetRequiredService<InitialData>();
 
     await initData.Invoke();
-    
+
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -122,5 +122,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", () => "hello world");
 
 app.Run();

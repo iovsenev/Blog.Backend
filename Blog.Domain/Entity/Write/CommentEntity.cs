@@ -24,7 +24,7 @@ public class CommentEntity : BaseEntity
         inputText = inputText.Trim();
 
         if (string.IsNullOrEmpty(inputText))
-            return ErrorFactory.General.InValid($"Comment must be not empty");
+            return ErrorFactory.General.NotValid($"Comment must be not empty");
         var comment = new CommentEntity(inputText, DateTimeOffset.UtcNow);
         comment.Author = author;
         comment.Article = article;  

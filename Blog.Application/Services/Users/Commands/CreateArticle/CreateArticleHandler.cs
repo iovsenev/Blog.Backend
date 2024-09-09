@@ -47,7 +47,7 @@ public class CreateArticleHandler : ICommandHandler<CreateArticleCommand>
         foreach (var tag in tags)
         {
             if (string.IsNullOrEmpty(tag))
-                return ErrorFactory.General.InValid("This tag is null or empty.");
+                return ErrorFactory.General.NotValid("This tag is null or empty.");
             var tagEntityResult = await _tagRepository.GetByTagNameAsync(tag, token);
 
             TagEntity tagEntity;

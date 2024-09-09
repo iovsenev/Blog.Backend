@@ -26,7 +26,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand>
         var user = userResult.Value;
 
         if (!BCrypt.Net.BCrypt.EnhancedVerify(command.Password, user.PasswordHash))
-            return ErrorFactory.General.InValid("Password is not valid");
+            return ErrorFactory.General.NotValid("Password is not valid");
 
         var token = _tokenHandler.CreateToken(user);
 

@@ -3,49 +3,40 @@ public static class ErrorFactory
 {
     public static class General
     {
-        public static Error InternalServer(string message)
+        public static Error InternalServer(object? message = null)
         {
+            message = message ?? "Server side error.";
             return new Error(ErrorCodes.InternalServer, message);
         }
 
-        public static Error NotFound(string? message = null)
+        public static Error NotFound(object? message = null)
         {
-            message = message == null
-                ? "Entity not found."
-                : message;
+            message = message ?? "Entity not found.";
             return new Error(ErrorCodes.NotFound, message);
         }
 
-        public static Error InValid(object? message = null)
+        public static Error NotValid(object? message = null)
         {
-            message = message == null
-                ? "Input data is not valid."
-                : message;
+            message = message ?? "Input data is not valid.";
             return new Error(ErrorCodes.NotValid, message);
         }
 
-        public static Error AlreadyExists(string? message = null)
+        public static Error AlreadyExists(object? message = null)
         {
-            message = message == null
-                ? "Object already exist."
-                : $": {message}";
-            return new Error(ErrorCodes.AlreadyExists, $"{message}");
+            message = message ?? "Object already exist.";
+            return new Error(ErrorCodes.AlreadyExists, message);
         }
 
-        public static Error AddingFalling(string? message = null)
+        public static Error AddingFalling(object? message = null)
         {
-            message = message == null
-                ? "The entity was not added."
-                : $": {message}";
-            return new Error(ErrorCodes.AddingFailed, $"{message}");
+            message = message ?? "The entity was not added.";
+            return new Error(ErrorCodes.AddingFailed, message);
         }
 
-        public static Error SaveFalling(string? message = null)
+        public static Error SaveFalling(object? message = null)
         {
-            message = message == null
-                ? "The entity was not saved."
-                : $": {message}";
-            return new Error(ErrorCodes.SaveFalling, $"{message}");
+            message = message ?? "The entity was not saved.";
+            return new Error(ErrorCodes.SaveFalling, message);
         }
     }
 }
