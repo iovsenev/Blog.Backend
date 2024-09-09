@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>918039bf-0356-4973-b7cf-7ca194e28c0b</ProjectGuid>
+    <ProjectGuid>4c6b2cb6-51d3-4755-9e9e-b4798d16736f</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>blog.api</DockerServiceName>
