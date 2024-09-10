@@ -41,7 +41,11 @@ public class ArticleEntity : BaseEntity
     private List<TagEntity> _tags = [];
     public ICollection<TagEntity> Tags => _tags.ToList();
 
-    public static Result <ArticleEntity> Create(string  title, string description, string text, IEnumerable<TagEntity> tags)
+    public static Result <ArticleEntity> Create(
+        string  title, 
+        string description, 
+        string text, 
+        IEnumerable<TagEntity> tags)
     {
         title = title.Trim();
         description = description.Trim();

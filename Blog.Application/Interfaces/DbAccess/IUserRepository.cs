@@ -11,4 +11,5 @@ public interface IUserRepository
     Task<Result<UserEntity>> GetByIdAsync(Guid id, CancellationToken token);
     Task<Result> IsUniqueUser(string? userName = null, string? email = null, CancellationToken token = default);
     Task<Result<RoleEntity>> GetRole(string roleName, CancellationToken token);
+    Task<Result<IEnumerable<UserEntity>>> GetAllUsersAsync(CancellationToken token);
 }

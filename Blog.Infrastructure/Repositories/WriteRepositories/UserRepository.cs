@@ -88,6 +88,11 @@ public class UserRepository : IUserRepository
 
         return entity;
     }
+
+    public async Task<Result<IEnumerable<UserEntity>>> GetAllUsersAsync(CancellationToken token)
+    {
+        return await _dbContext.Users.ToListAsync(token);
+    }
 }
 
 

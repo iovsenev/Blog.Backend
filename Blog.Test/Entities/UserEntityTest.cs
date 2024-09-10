@@ -1,11 +1,6 @@
 ﻿using Blog.Domain.Common;
 using Blog.Domain.Entity.Write;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blog.Test.Entities;
 public class UserEntityTest
@@ -31,4 +26,62 @@ public class UserEntityTest
         result.Value.Role.Should().Be(userRole);
     }
 
+    [Fact]
+    public void CreateUserNonRole_Success()
+    {
+        var name = "user";
+        var password = "userPassword";
+        var email = "user@user.user";
+        var result = UserEntity.Create(
+            email,
+            password,
+            name);
+
+        result.IsSuccess.Should().Be(true);
+        result.IsFailure.Should().BeFalse();
+        result.Error.Should().Be(Error.None);
+        result.Value.Should().NotBeNull();
+        result.Value.UserName.Should().Be("@" + name);
+        result.Value.Role.Should().Be(RoleEntity.User);
+    }
+
+    [Fact]
+    public void CreateUserNonRoleNoneName_Success()
+    {
+        var name = "@someUser";
+        var password = "userPassword";
+        var email = "someUser@user.user";
+        var result = UserEntity.Create(
+            email,
+            password);
+
+        result.IsSuccess.Should().Be(true);
+        result.IsFailure.Should().BeFalse();
+        result.Error.Should().Be(Error.None);
+        result.Value.Should().NotBeNull();
+        result.Value.UserName.Should().Be(name);
+        result.Value.Role.Should().Be(RoleEntity.User);
+    }
+
+    [Theory]
+    [InlineData("", "", "")]
+    [InlineData("emai@email.ru", "", "userName")]
+    [InlineData("email", "pass", "userName")]
+    [InlineData("emai@email", "pass", "userName")]
+    [InlineData("@email.com", "pass", "userName")]
+    [InlineData("asda@.com", "pass", "userName")]
+    public void CreateUserWithNotCorrectParam(string email, string pass, string userName)
+    {
+
+        var result = UserEntity.Create(
+            email,
+            pass,
+            userName);
+
+        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().NotBe(Error.None);
+        result.Error.ErrorCode.Should().Be(ErrorCodes.NotValid);
+        Assert.Throws<InvalidOperationException>(() => result.Value);
+    }
 }

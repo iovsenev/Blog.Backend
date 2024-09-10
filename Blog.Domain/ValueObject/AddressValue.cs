@@ -1,4 +1,4 @@
-﻿using Blog.Domain.Common;
+﻿ using Blog.Domain.Common;
 
 namespace Blog.Domain.ValueObject;
 public class AddressValue : BaseValueObject
